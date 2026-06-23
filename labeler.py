@@ -39,8 +39,8 @@ def _simple_polarity(content: str) -> tuple:
 
     positive_words = ["太棒了", "支持", "喜欢", "好", "赞", "优秀", "期待",
                       "牛逼", "厉害", "不错", "良心", "绝了", "开心", "感动"]
-    negative_words = ["垃圾", "恶心", "垃圾", "反感", "讨厌", "失望", "愤怒",
-                      "离谱", "傻逼", "无语", "恶心", "烂", "坑", "抵制"]
+    negative_words = ["垃圾", "恶心", "反感", "讨厌", "失望", "愤怒",
+                      "离谱", "傻逼", "无语", "烂", "坑", "抵制"]
 
     pos_score = sum(1 for w in positive_words if w in text)
     neg_score = sum(1 for w in negative_words if w in text)

@@ -7,6 +7,7 @@ import asyncpg
 from typing import List, Dict, Any, Optional
 from datetime import date, datetime
 from config import settings
+from professions import PROFESSION_KEYWORDS
 
 
 class AttitudeDB:
@@ -117,7 +118,15 @@ class AttitudeDB:
 
     async def compute_rankings(self, rank_date: date):
         """按话题聚合情感统计，写入 attitude_rankings"""
-        sql = """
+        # 从 professions.py 动态生成职业分布 SQL 片段
+        prof_filters = []
+        for prof in PROFESSION_KEYWORDS:
+            prof_filters.append(
+                f"'{prof}', COUNT(*) FILTER (WHERE mentioned_profession = '{prof}')::int"
+            )
+        prof_sql_part = ", ".join(prof_filters)
+
+        sql = f"""
             INSERT INTO attitude_rankings (
                 ranking_date, topic_id, topic_name,
                 total_labeled, positive_count, negative_count, neutral_count,
@@ -150,17 +159,10 @@ class AttitudeDB:
                     'disappointment', COUNT(*) FILTER (WHERE emotion_finegrained = 'disappointment')::int,
                     'indifference', COUNT(*) FILTER (WHERE emotion_finegrained = 'indifference')::int
                 ),
-                jsonb_build_object(
-                    '程序员', COUNT(*) FILTER (WHERE mentioned_profession = '程序员')::int,
-                    '公务员', COUNT(*) FILTER (WHERE mentioned_profession = '公务员')::int,
-                    '教师', COUNT(*) FILTER (WHERE mentioned_profession = '教师')::int,
-                    '外卖员', COUNT(*) FILTER (WHERE mentioned_profession = '外卖员')::int,
-                    '医生', COUNT(*) FILTER (WHERE mentioned_profession = '医生')::int,
-                    '自媒体', COUNT(*) FILTER (WHERE mentioned_profession = '自媒体')::int
-                ),
+                jsonb_build_object({prof_sql_part}),
                 EXTRACT(EPOCH FROM NOW())::bigint
             FROM attitude_labels al
-            LEFT JOIN mindspider.daily_topics dt ON al.topic_id = dt.topic_id
+            LEFT JOIN daily_topics dt ON al.topic_id = dt.topic_id
             WHERE DATE(to_timestamp(al.labeled_at)) = $1::date
             GROUP BY COALESCE(al.topic_id, '__untagged__'), COALESCE(dt.topic_name, '未分类')
             ON CONFLICT (ranking_date, topic_id)

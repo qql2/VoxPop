@@ -1,90 +1,67 @@
-# VoxPop — 调研发现
+# Findings & Decisions — VoxPop 全岗位态度盘点
 
-## 市场方案调研
+<!-- WHAT: 知识库。存储调研中发现的一切和做出的决策。持久化外部记忆。 -->
 
-### 商业舆情平台
-| 平台 | 特点 | 不适合原因 |
-|------|------|-----------|
-| 新浪舆情通 | 微博官方数据、情感分析、报告生成 | 付费，封闭，不能做自定义"态度排行" |
-| 舆情录 | 20类信源，免费7天 | 锁定为通用监控，不能本地化 |
-| 启信舆情API | 企业级品牌口碑监控 | 不面向个人开发者 |
+## Requirements
 
-**结论**：没有直接可用的"全岗位态度盘点"成熟方案。
+- 基于已有爬虫结果（MindSpider 已写入 PostgreSQL）做情感分析
+- 可爬取 B站 + 微博（暂不扩展，因其他平台有兼容问题）
+- 标注评论的情感极性 + 细粒度情绪 + 态度倾向
+- 提取评论涉及的职业/岗位
+- 按话题聚合产出乐观/悲观排行
+- 独立项目，不耦合 BettaFish 代码
+- 配置自己的 LLM API，不依赖 BettaFish 的 API 配置
+- 文件输出（JSON + Markdown），不要看板
+- 手动调度
 
-### 开源项目
-- `Yoyo-0125/nlp-public-opinion-analysis`：微博+知乎爬取 + BERT 情感分析。功能浅，无排行逻辑。
-- `MacchiatoZhou/Weibo_PublicOpinion_AnalysisSystem`：全栈舆情系统，偏学术方向。
-- B站弹幕情感分析（GitHub samklein112）：学术级别的 demo 项目。
+## Research Findings
 
-**结论**：都是实验级别或通用框架，没有一个做"态度排行盘点"的。
+### 市场方案
+- 商业舆情平台（新浪舆情通、舆情录、启信API）：付费、封闭、不能做自定义"态度排行"
+- 开源项目（nlp-public-opinion-analysis、Weibo_PublicOpinion_AnalysisSystem）：实验级别，无排行逻辑
+- 学术方向（BERTopic+ALBERT-TextCNN、BERT-BiLSTM-DPCNN）：停留在论文阶段
+- **结论：没有可直接复用方案，需要自建**
 
-### 学术方向
-- BERTopic + ALBERT-TextCNN 做微博多级舆情分析（2025 ACM论文）
-- BERT-BiLSTM-DPCNN 在 B站+微博评论分类上达到 96.12% 精度
-- 停留在实验阶段，工程化程度低
+### BettaFish 现有能力
+- MindSpider BroadTopicExtraction：从13个平台发现热点 + AI提取关键词
+- DeepSentimentCrawling：基于 MediaCrawler，wb/bili 可正常爬取
+- SentimentAnalysisModel：含 WeiboSentiment_SmallQwen(Qwen3微调)、WeiboMultilingualSentiment(HuggingFace distilbert)、ML基线(SVM/Bayes/LSTM/XGBoost)
+- InsightEngine：Deep Search Agent，已集成情感分析+报告生成
+- 数据库表：weibo_note_comment、bilibili_video_comment、daily_topics
 
-## BettaFish 现有能力盘点
+### 技术验证
+- 级联标注效率估算：60-70%评论被关键词基线覆盖，30-40%走 LLM
+- 职业提取：关键词词典覆盖大部分，边角走 LLM
+- 多职业评论处理：占比极小，取第一匹配，不过度设计
 
-### 可用模块
+## Technical Decisions
 
-| 模块 | 路径 | 价值 |
-|------|------|------|
-| MindSpider BroadTopicExtraction | `MindSpider/BroadTopicExtraction/` | 从13个平台发现热点 + AI提取关键词 |
-| MindSpider DeepSentimentCrawling | `MindSpider/DeepSentimentCrawling/` | 按关键词爬取 B站/微博 评论到数据库 |
-| SentimentAnalysisModel | `SentimentAnalysisModel/` | 多个情感模型 |
-| └─ WeiboSentiment_SmallQwen | .../WeiboSentiment_SmallQwen/ | Qwen3 0.6B~8B 微调，需 GPU |
-| └─ WeiboMultilingualSentiment | .../WeiboMultilingualSentiment/ | HuggingFace distilbert，22语言 |
-| └─ WeiboSentiment_MachineLearning | .../WeiboSentiment_MachineLearning/ | SVM/贝叶斯/LSTM/XGBoost基线 |
-| InsightEngine | `InsightEngine/` | Deep Search Agent，已集成情感分析+报告生成 |
+| Decision | Rationale |
+|----------|-----------|
+| 独立新表 attitude_labels/attitude_rankings | 不入侵原表结构，可重跑，与 MindSpider 解耦 |
+| 级联标注（方案 C） | 平衡精度与成本，先近后远 |
+| 关键词词典 + LLM 兜底 | 词典覆盖大部分场景，LLM 处理边界情况 |
+| 文件输出 JSON + Markdown | 最简单起点，后续可加看板 |
+| 手动调度 | 先跑通再考虑自动化 |
+| DS_store + .gitignore | 避免 macOS 产物污染仓库 |
 
-### 数据表
-- `weibo_note` — 微博帖子（有 topic_id 关联）
-- `weibo_note_comment` — 微博评论（有 content/ip_location/点赞等）
-- `bilibili_video` — B站视频
-- `bilibili_video_comment` — B站评论
-- `daily_topics` — 话题（AI提取）
-- `daily_news` — 每日热点新闻
+## Issues Encountered
 
-### 平台兼容性
-- ✅ 正常：微博 (wb)、B站 (bili)
-- ❌ 不可用：抖音、快手、小红书、知乎、贴吧
+| Issue | Resolution |
+|-------|------------|
+| 暂无（尚未进入执行阶段） | — |
 
-## 技术方案推演
+## Resources
 
-### 数据分析映射
-```
-ODS（原始层）→ weibo_note_comment / bilibili_video_comment
-DWD（明细层）→ attitude_labels（新增标注表）
-DWS（汇总层）→ attitude_rankings（新增排行缓存表）
-ADS（应用层）→ 每日排行报告（JSON/MD）
-```
+- GitHub 仓库：https://github.com/qql2/VoxPop
+- MediaCrawler（MindSpider 底层爬虫）：https://github.com/NanmiCoder/MediaCrawler
+- BettaFish 主项目：https://github.com/666ghj/BettaFish
+- HuggingFace 多语言情感模型：tabularisai/multilingual-sentiment-analysis
+- DeepSeek API：https://api.deepseek.com
+- asyncpg 文档：https://magicstack.github.io/asyncpg/
+- Skill 模板来源：planning-with-files/templates/
 
-### 级联标注效率估算
-- 评论60-70%被关键词基线高置信度覆盖 → 0 额外成本
-- 剩余 30-40% 走 LLM
-- 如果日均 1000 条评论，约 300-400 条需 LLM，deepseek-chat 价格可忽略
+## Visual/Browser Findings
 
-### 职业提取策略
-- 预定义词典匹配优先
-- 单匹配 → 直接返回
-- 多匹配 → 取第一（不引入多标复杂度）
-- 无匹配 → LLM 兜底
-
-## 代码结构（已创建）
-
-```
-AttitudeEngine/
-├── config.py         # DB + LLM API 配置，独立 .env
-├── db.py             # 读评论表、写 attitude_labels、聚合排行
-├── labeler.py         # 级联标注核心
-├── professions.py     # 预置 17 个职业关键词
-├── reporter.py        # 排行报告输出
-├── run.py             # 手动入口
-├── schema.sql         # 3 张新表定义
-├── .env.example       # 配置模板
-├── requirements.txt   # 仅 3 个依赖
-├── README.md          # 使用说明
-├── task_plan.md       # 本文件
-├── findings.md        # 本文件
-└── progress.md        # 进度日志
-```
+<!-- 尚未涉及浏览器/图片类调研 -->
+-

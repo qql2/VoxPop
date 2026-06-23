@@ -10,9 +10,11 @@ AttitudeEngine — 手动运行入口
 """
 
 import sys
+import os
 import asyncio
 import argparse
 from datetime import date, timedelta
+from pathlib import Path
 
 from config import settings
 from db import AttitudeDB
@@ -22,9 +24,8 @@ from reporter import generate_ranking_report
 
 async def init_database(db: AttitudeDB):
     """执行 schema.sql 建表"""
-    schema_path = __file__.rsplit("/", 1)[0] + "/schema.sql"
-    with open(schema_path, "r") as f:
-        sql = f.read()
+    schema_path = Path(__file__).parent / "schema.sql"
+    sql = schema_path.read_text()
 
     async with db.pool.acquire() as conn:
         await conn.execute(sql)

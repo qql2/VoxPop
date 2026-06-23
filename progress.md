@@ -1,66 +1,73 @@
-# VoxPop — 进展日志
+# Progress Log — VoxPop 全岗位态度盘点
 
-## 2026-06-23 22:46~23:36 GMT+8 — 方案确定与项目骨架
+<!-- WHAT: 会话日志 — 按时间顺序记录做了什么、何时做、结果如何。 -->
 
-### 会话信息
-- 来源：Telegram 群聊 "全岗位态度盘点"
-- 参与人：qql1（霍林堂）
-- 议题：基于 BettaFish/MindSpider 做全岗位态度盘点
+## Session: 2026-06-23 22:46~23:44 GMT+8
 
-### 讨论过程
+### Phase 1: 方案调研 ✅ complete
+- **Status:** complete
+- **Started:** 2026-06-23 22:46
+- Actions taken:
+  - 调研市场现有舆情方案（商业平台 + 开源项目 + 学术论文）
+  - 浏览 BettaFish 项目结构：MindSpider / SentimentAnalysisModel / InsightEngine
+  - 确认当前仅 wb/bili 两个平台正常可用
+  - 确定技术路线：离线批处理 + 级联标注，不做过度设计
+- Files created/modified:
+  - `findings.md`（记录了市场调研和 BettaFish 能力盘点）
 
-1. **22:46** — 提出需求：收集网友观念，做乐观/悲观情绪排行盘点
-2. **22:46~22:49** — 调研 BettaFish 项目结构（MindSpider、SentimentAnalysisModel、InsightEngine）
-3. **22:49** — 群聊介绍
-4. **22:55** — 与数据分析领域交叉讨论，确定无需过度设计
-5. **22:59** — 情感标注策略讨论（三方案对比）
-   - A: 纯本地模型（省钱但维度有限）
-   - B: 纯 LLM （灵活但费钱）
-   - C: 级联标注（推荐，平衡两者）
-6. **23:04** — 数据存储架构讨论：独立新表 vs 入侵原表 → 选独立新表
-7. **23:06** — 优缺点分析
-8. **23:11** — 职业维度提取方案：词典匹配 + LLM 兜底
-9. **23:15** — 多职业长评论处理：不过度设计，取第一匹配
-10. **23:17~23:21** — 需求确认：
-    - 独立于 BettaFish 的项目
-    - 独立配置 API
-    - 文件输出（不要看板）
-    - 手动运行
-    - 复用 PostgreSQL
-11. **23:21~23:23** — 创建 10 个项目文件
-12. **23:23~23:26** — 误写入全局记忆 MEMORY.md，用户指出后撤回
-13. **23:35~23:36** — 使用 planning-with-files 技能，创建 task_plan.md / findings.md / progress.md
+### Phase 2: 项目骨架 ✅ complete
+- **Status:** complete
+- **Started:** 2026-06-23 23:21
+- Actions taken:
+  - 创建 `config.py` — 数据库 + LLM API 配置，独立 .env
+  - 创建 `db.py` — 读评论表、写 attitude_labels、聚合排行
+  - 创建 `labeler.py` — 级联标注核心（关键词基线 + LLM 兜底）
+  - 创建 `professions.py` — 预设 17 个职业关键词
+  - 创建 `reporter.py` — 排行报告输出（JSON + Markdown）
+  - 创建 `run.py` — 手动入口
+  - 创建 `schema.sql` — 3 张新表定义（attitude_labels / attitude_rankings / attitude_batch_log）
+  - 创建 `README.md`、`.env.example`、`requirements.txt`
+  - 误写入 MEMORY.md 后撤销（群聊记忆不写全局）
+  - 使用 planning-with-files 技能创建三份规划文件
+  - 项目从 BettaFish/ 迁移到独立目录 ~/VoxPop/
+  - 初始化 git 仓库并推送到 GitHub：https://github.com/qql2/VoxPop
+- Files created/modified:
+  - `config.py`（创建）
+  - `db.py`（创建）
+  - `labeler.py`（创建）
+  - `professions.py`（创建）
+  - `reporter.py`（创建）
+  - `run.py`（创建）
+  - `schema.sql`（创建）
+  - `README.md`（创建）
+  - `.env.example`（创建）
+  - `.gitignore`（创建）
+  - `requirements.txt`（创建）
+  - `.git/`（初始化）
+  - GitHub ~/VoxPop
 
-### 已创建/修改文件
+## Test Results
 
-| 文件 | 操作 | 说明 |
-|------|------|------|
-| config.py | 创建 | 项目配置 |
-| db.py | 创建 | 数据库操作 |
-| labeler.py | 创建 | 级联标注 |
-| professions.py | 创建 | 职业词典 |
-| reporter.py | 创建 | 排行输出 |
-| run.py | 创建 | 入口 |
-| schema.sql | 创建 | 数据库表 |
-| .env.example | 创建 | 配置模板 |
-| requirements.txt | 创建 | 依赖 |
-| README.md | 创建 | 使用说明 |
-| task_plan.md | 创建 | 任务计划 |
-| findings.md | 创建 | 调研发现 |
-| progress.md | 创建 | 本日志 |
-| MEMORY.md | 撤回 | 误写入后恢复 |
+| Test | Input | Expected | Actual | Status |
+|------|-------|----------|--------|--------|
+| 未执行（尚未进入运行阶段） | — | — | — | ⏳ |
 
-### 决策清单
+## Error Log
 
-1. 方案 C（级联标注）— ✅
-2. 独立新表 attitude_labels / attitude_rankings — ✅
-3. 职业词典+LLM 兜底 — ✅
-4. 文件输出 — ✅
-5. 手动调度 — ✅
-6. 不过度设计多职业场景 — ✅
-7. 会话内记忆，不写全局 — ✅
+| Timestamp | Error | Attempt | Resolution |
+|-----------|-------|---------|------------|
+| 2026-06-23 23:26 | 误写入 MEMORY.md 全局记忆 | 1 | 撤回编辑 + 删除 memory/ 文件 |
 
-### 下一步
+## 5-Question Reboot Check
 
-- 等待霍林堂决定何时推进 Phase 3/4
-- 需要确认：职业词典定稿、本地模型策略、数据库链接可用性
+| Question | Answer |
+|----------|--------|
+| Where am I? | Phase 2 (项目骨架) — **complete** |
+| Where am I going? | Phase 3 (本地模型集成) → Phase 4 (跑通链路) → Phase 5 (定制迭代) |
+| What's the goal? | 开发 VoxPop，对网友评论进行情感标注 → 话题聚合 → 乐观/悲观排行盘点 |
+| What have I learned? | See findings.md |
+| What have I done? | See progress.md (above) |
+
+---
+
+*Update after completing each phase or encountering errors*
