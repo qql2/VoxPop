@@ -1,15 +1,17 @@
 # VoxPop — 全岗位态度盘点
 
-基于 MindSpider 爬取的微博/B站评论，对网友态度进行**情感标注 → 话题聚合 → 乐观/悲观排行**的离线批处理工具。
+> **前置依赖：** 本工具需要 [MindSpider](https://github.com/qql2/MindSpider) 爬取微博/B站评论写入 PostgreSQL 后才能运行。两者是独立的仓库，需先运行 MindSpider 采集数据。
+
+基于 [MindSpider](https://github.com/qql2/MindSpider) 爬取的微博/B站评论，对网友态度进行**情感标注 → 话题聚合 → 乐观/悲观排行**的离线批处理工具。
 
 ## 架构
 
 ```
-MindSpider 爬评论     →      PostgreSQL           →     跑 run.py
-(wb_note_comment,          weibo_note_comment           读取未标注评论
- bili_video_comment)        bili_video_comment           级联标注 → attitude_labels
-                             attitude_labels (新)        聚合排行 → attitude_rankings
-                             attitude_rankings (新)      输出排行报告 (JSON/MD)
+[MindSpider] 爬评论  →      PostgreSQL           →     跑 run.py
+(qql2/MindSpider)         weibo_note_comment           读取未标注评论
+                          bili_video_comment           级联标注 → attitude_labels
+                          attitude_labels (新)        聚合排行 → attitude_rankings
+                          attitude_rankings (新)      输出排行报告 (JSON/MD)
 ```
 
 ## 快速开始
