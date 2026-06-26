@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS attitude_labels (
     source_id BIGINT NOT NULL,                   -- 指向原表（weibo_note_comment.id 等）
     topic_id VARCHAR(64) DEFAULT NULL,           -- 关联 daily_topics.topic_id
     mentioned_profession VARCHAR(64) DEFAULT NULL, -- 涉及的职业，null 表示无明确指向
+    opinion_target VARCHAR(128) DEFAULT NULL,          -- 评论对象（如 "QQ音乐"、"日本"、"警察"）
+    target_type VARCHAR(32) DEFAULT NULL,              -- 对象类型: profession|company|country|person|product|issue|none
 
     sentiment_polarity VARCHAR(16) NOT NULL,     -- positive | negative | neutral
     emotion_finegrained VARCHAR(32) DEFAULT NULL,-- optimism | anxiety | anger | sarcasm | support | doubt | disappointment | indifference

@@ -46,17 +46,24 @@ class AttitudeDB:
             table = "weibo_note_comment"
             id_field = "id"
             content_field = "content"
+            parent_id_field = "note_id"
         elif platform == "bilibili":
             table = "bilibili_video_comment"
             id_field = "id"
             content_field = "content"
+            parent_id_field = "video_id"
+        elif platform == "xhs":
+            table = "xhs_note_comment"
+            id_field = "id"
+            content_field = "content"
+            parent_id_field = "note_id"
         else:
             raise ValueError(f"不支持的平台: {platform}")
 
         # LEFT JOIN attitude_labels 过滤已标注
         sql = f"""
             SELECT c.{id_field} AS source_id, c.{content_field} AS content,
-                   c.add_ts, c.note_id AS parent_id, '{platform}' AS source_platform,
+                   c.add_ts, c.{parent_id_field} AS parent_id, '{platform}' AS source_platform,
                    'comment' AS source_type
             FROM {table} c
             LEFT JOIN attitude_labels al
@@ -83,10 +90,12 @@ class AttitudeDB:
         sql = """
             INSERT INTO attitude_labels
                 (source_platform, source_type, source_id, topic_id,
-                 mentioned_profession, sentiment_polarity, emotion_finegrained,
+                 mentioned_profession, opinion_target, target_type,
+                 has_profession, professions,
+                 sentiment_polarity, emotion_finegrained,
                  attitude_tendency, label_method, confidence_score,
-                 raw_response, labeled_at, batch_id)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+                 raw_request, raw_response, labeled_at, batch_id)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
             ON CONFLICT (source_platform, source_type, source_id)
             DO NOTHING
         """
@@ -101,11 +110,16 @@ class AttitudeDB:
                         l["source_id"],
                         l.get("topic_id"),
                         l.get("mentioned_profession"),
+                        l.get("opinion_target"),
+                        l.get("target_type"),
+                        l.get("has_profession"),
+                        l.get("professions"),
                         l["sentiment_polarity"],
                         l.get("emotion_finegrained"),
                         l.get("attitude_tendency"),
                         l["label_method"],
                         l.get("confidence_score"),
+                        l.get("raw_request"),
                         l.get("raw_response"),
                         now,
                         l.get("batch_id"),
@@ -113,6 +127,82 @@ class AttitudeDB:
                     for l in labels
                 ],
             )
+
+    # ---- 批次日志 ----
+
+    async def write_batch_log(
+        self, batch_id: str, platform: str, date_scope: str,
+        total_fetched: int, labeled_count: int, llm_count: int,
+        model_count: int, failed_count: int
+    ):
+        now = int(datetime.now().timestamp())
+        sql = """
+            INSERT INTO attitude_batch_log
+                (batch_id, platform, date_scope, total_fetched,
+                 labeled_count, llm_count, model_count, failed_count,
+                 started_at, status)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'running')
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(sql, batch_id, platform, date_scope,
+                               total_fetched, labeled_count, llm_count, model_count, failed_count, now)
+
+    async def finish_batch_log(self, batch_id: str):
+        now = int(datetime.now().timestamp())
+        sql = """
+            UPDATE attitude_batch_log
+            SET finished_at=$1, status='completed'
+            WHERE batch_id=$2
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(sql, now, batch_id)
+
+    async def fail_batch_log(self, batch_id: str):
+        now = int(datetime.now().timestamp())
+        sql = """
+            UPDATE attitude_batch_log
+            SET finished_at=$1, status='failed'
+            WHERE batch_id=$2
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(sql, now, batch_id)
+
+    async def get_batch_stats(self, batch_id: str = None) -> list:
+        """获取批次统计，用于观察报告"""
+        if batch_id:
+            sql = "SELECT * FROM attitude_batch_log WHERE batch_id=$1 ORDER BY started_at"
+            async with self.pool.acquire() as conn:
+                rows = await conn.fetch(sql, batch_id)
+        else:
+            sql = "SELECT * FROM attitude_batch_log ORDER BY started_at DESC LIMIT 20"
+            async with self.pool.acquire() as conn:
+                rows = await conn.fetch(sql)
+        return [dict(r) for r in rows]
+
+    async def get_label_stats(self, batch_id: str = None) -> dict:
+        """获取标注统计：平台分布、方法分布、错误统计
+        传递 batch_id 则只查该批次，否则查全部
+        """
+        if batch_id:
+            conditions = "WHERE batch_id = $1"
+            params = (batch_id,)
+        else:
+            conditions = "WHERE 1=1"
+            params = ()
+        sql = f"""
+            SELECT
+                source_platform,
+                label_method,
+                COUNT(*)::int as cnt,
+                COUNT(*) FILTER (WHERE raw_response LIKE 'label_error:%')::int as errors
+            FROM attitude_labels
+            {conditions}
+            GROUP BY source_platform, label_method
+            ORDER BY source_platform, label_method
+        """
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(sql, *params)
+        return [dict(r) for r in rows]
 
     # ---- 排行聚合 ----
 
@@ -143,12 +233,12 @@ class AttitudeDB:
                 COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::int,
                 COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::int,
                 COUNT(*) FILTER (WHERE sentiment_polarity = 'neutral')::int,
-                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::real / NULLIF(COUNT(*), 0), 4),
-                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::real / NULLIF(COUNT(*), 0), 4),
-                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'neutral')::real  / NULLIF(COUNT(*), 0), 4),
-                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::real / NULLIF(COUNT(*), 0), 4),
-                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::real / NULLIF(COUNT(*), 0), 4),
-                ROUND(COUNT(*)::real / NULLIF(MAX(COUNT(*)) OVER (), 0), 4),
+                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::numeric / NULLIF(COUNT(*), 0), 4),
+                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::numeric / NULLIF(COUNT(*), 0), 4),
+                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'neutral')::numeric  / NULLIF(COUNT(*), 0), 4),
+                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::numeric / NULLIF(COUNT(*), 0), 4),
+                ROUND(COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::numeric / NULLIF(COUNT(*), 0), 4),
+                ROUND(COUNT(*)::numeric / NULLIF(MAX(COUNT(*)) OVER (), 0), 4),
                 jsonb_build_object(
                     'optimism', COUNT(*) FILTER (WHERE emotion_finegrained = 'optimism')::int,
                     'anxiety', COUNT(*) FILTER (WHERE emotion_finegrained = 'anxiety')::int,
@@ -163,7 +253,6 @@ class AttitudeDB:
                 EXTRACT(EPOCH FROM NOW())::bigint
             FROM attitude_labels al
             LEFT JOIN daily_topics dt ON al.topic_id = dt.topic_id
-            WHERE DATE(to_timestamp(al.labeled_at)) = $1::date
             GROUP BY COALESCE(al.topic_id, '__untagged__'), COALESCE(dt.topic_name, '未分类')
             ON CONFLICT (ranking_date, topic_id)
             DO UPDATE SET
@@ -181,4 +270,4 @@ class AttitudeDB:
                 profession_distribution = EXCLUDED.profession_distribution
         """
         async with self.pool.acquire() as conn:
-            await conn.execute(sql, rank_date.isoformat())
+            await conn.execute(sql, rank_date)

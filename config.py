@@ -21,9 +21,13 @@ class Settings(BaseSettings):
     LLM_BASE_URL: str = "https://api.deepseek.com"
     LLM_MODEL: str = "deepseek-chat"
 
-    # --- 标注阈值 ---
-    MODEL_CONFIDENCE_THRESHOLD: float = 0.80  # 本地模型低于此值则走 LLM
-    BATCH_SIZE: int = 20                       # LLM 批处理大小
+    # --- Spark Lite（主力标注） ---
+    SPARK_API_KEY: str = ""
+    SPARK_BASE_URL: str = "https://spark-api-open.xf-yun.com/v1"
+    SPARK_MODEL: str = "lite"
+
+    # --- 标注 ---
+    BATCH_SIZE: int = 20
 
     # --- 输出 ---
     OUTPUT_DIR: str = "outputs"
