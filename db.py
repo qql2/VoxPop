@@ -57,6 +57,11 @@ class AttitudeDB:
             id_field = "id"
             content_field = "content"
             parent_id_field = "note_id"
+        elif platform == "zhihu":
+            table = "zhihu_comment"
+            id_field = "id"
+            content_field = "content"
+            parent_id_field = "comment_id"
         else:
             raise ValueError(f"不支持的平台: {platform}")
 

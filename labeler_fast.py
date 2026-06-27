@@ -146,10 +146,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                     "sentiment_polarity": sentiment,
                     "emotion_finegrained": emotion,
                     "attitude_tendency": "support" if sentiment == "positive" else ("oppose" if sentiment == "negative" else "neutral"),
-                    topic = parsed.get("topic") or None
                     "mentioned_profession": mentioned_prof,
                     "opinion_target": mentioned_prof,
-                    "topic_id": topic,
+                    "topic_id": parsed.get("topic") or None,
                     "target_type": "profession" if mentioned_prof else None,
                     "confidence_score": avg_conf,
                     "label_method": "llm",
