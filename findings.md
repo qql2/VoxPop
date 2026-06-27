@@ -26,6 +26,20 @@
 |------|------|
 | API: DeepInfra Llama 3.1 8B | 比 PackyAPI 稳定，响应 0.7-1.3s |
 | 错误标记 error | 可重标，不丢失 |
-| Prompt 标准化 | 职业名称归一化 |
+| Prompt 标准化（规则 5） | 职业名称归一化 |
 | Flask Web 工具 | 即开即用，无构建步骤 |
 | 反馈闭环 | 低样本职业→关键词→爬取→标注 |
+| content_id 去重 | 避免重复爬取同内容 |
+| ON CONFLICT DO NOTHING | 避免重复标注 |
+
+## 完整动作流程
+
+```
+① MindSpider CLI → 读 daily_topics 关键词 → 搜索+爬取
+② 写入 PostgreSQL（zhihu_content/zhihu_comment）
+③ VoxPop labeler_fast.py → 关键词过滤 → LLM 标注 → attitude_labels
+④ 产出排行 + Web 工具查询
+⑤ feedback_keywords.py → 低样本职业 → daily_topics → 回到 ①
+```
+
+去重：MediaCrawler 按 content_id / comment_id 查重，VoxPop 按 (platform, type, id) 幂等写入。

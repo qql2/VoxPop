@@ -44,7 +44,56 @@
 | 问题 | 回答 |
 |------|------|
 | Where am I? | Phase 6 完成，闭环已建立 |
-| Where am I going? | 跑反馈闭环第二轮爬取 |
+| Where am I going? | 继续反馈闭环轮次 |
 | What's the goal? | 全岗位态度排行盘点 |
 | What have I learned? | See findings.md |
 | What have I done? | See progress.md (above) |
+
+## 完整的动作流程
+
+```
+① MindSpider CLI                          daily_topics → 关键词
+   python main.py --deep-sentiment               ↓
+   --platforms zhihu                   搜索→爬内容+评论
+                                              ↓
+② PostgreSQL                           zhihu_content / zhihu_comment
+   weibo/bilibili/xhs 表                       ↓
+                                              ↓
+③ VoxPop 标注（labeler_fast.py）
+   Step 1: 关键词预过滤（professions.py 词典）
+   Step 2: DeepInfra Llama 3.1 8B           → attitude_labels
+           职业提取 + 情感 + 情绪 + 话题
+                                              ↓
+④ 产出 & 可观测
+   · SQL Web 工具（http://127.0.0.1:5000）
+   · 职业排行 Markdown / JSON
+   · 职业名称已通过 prompt 规则 5 标准化
+                                              ↓
+⑤ 反馈闭环（feedback_keywords.py --apply）
+   提取 attitude_labels 中 <10 条的职业
+   → 写入 daily_topics 表 → 回到 ①
+```
+
+### 关键文件职责
+| 文件 | 作用 |
+|------|------|
+| labeler_fast.py | 异步并行标注器（5 并发） |
+| labeler.py | 同步版备用 |
+| professions.py | 22 种职业关键词词典 |
+| db.py | 数据库读写 + 排行聚合 |
+| run.py | 标注入口 |
+| feedback_keywords.py | 低样本职业→爬虫关键词 |
+| sql_query_app.py | 查询 Web 工具 |
+| reporter.py | 排行报告生成 |
+
+### 去重机制
+| 层级 | 方式 | 依据 |
+|------|------|------|
+| MediaCrawler 入库 | SELECT 查 content_id → 更新/插入 | 知乎分配的唯一 ID |
+| VoxPop 标注 | INSERT ON CONFLICT DO NOTHING | (platform, type, source_id) |
+
+### 一轮完整轮次
+```
+MindSpider爬取 → VoxPop标注 → 排行 → feedback_keywords → 回到MindSpider
+```
+已跑 2 轮：第一轮程序员关键词，第二轮反馈闭环。

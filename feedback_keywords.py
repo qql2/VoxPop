@@ -42,6 +42,7 @@ async def get_profession_stats():
     return {r["mentioned_profession"]: r["cnt"] for r in rows}
 
 async def insert_daily_topic(keywords: list):
+    import asyncpg
     """将关键词写入 daily_topics 表，供 MindSpider 读取"""
     conn = await asyncpg.connect(**DB_CONFIG)
     topic_id = f"feedback_{date.today().isoformat()}"

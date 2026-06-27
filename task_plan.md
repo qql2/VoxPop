@@ -29,6 +29,21 @@ Phase 6 完成 — 闭环已建立，准备第二轮
 - 标注重试失败标记 error
 - 低样本职业 → 反馈为爬虫关键词 → 闭环
 
+## 完整动作流
+
+```
+① MindSpider CLI                ──→  PostgreSQL（评论表）
+         ↓
+② VoxPop labeler_fast.py        ──→  attitude_labels
+   关键词预过滤 → DeepInfra LLM
+         ↓
+③ 排行产出 + Web 查询（:5000）
+         ↓
+④ feedback_keywords.py --apply  ──→  daily_topics → 回到 ①
+```
+
+去重：爬虫按 content_id，标注按 (platform, type, id) 幂等。
+
 ## Git Log（汇总）
 ```
 1982566 feat: 反馈闭环 — 低样本职业→爬虫关键词
