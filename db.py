@@ -227,8 +227,8 @@ class AttitudeDB:
             )
             SELECT
                 $1::date,
-                COALESCE(al.topic_id, '__untagged__'),
-                COALESCE(dt.topic_name, '未分类'),
+                COALESCE(topic_id, '__untagged__'),
+                CASE WHEN topic_id IS NULL THEN '未分类' ELSE topic_id END,
                 COUNT(*)::int,
                 COUNT(*) FILTER (WHERE sentiment_polarity = 'positive')::int,
                 COUNT(*) FILTER (WHERE sentiment_polarity = 'negative')::int,
@@ -252,10 +252,10 @@ class AttitudeDB:
                 jsonb_build_object({prof_sql_part}),
                 EXTRACT(EPOCH FROM NOW())::bigint
             FROM attitude_labels al
-            LEFT JOIN daily_topics dt ON al.topic_id = dt.topic_id
-            GROUP BY COALESCE(al.topic_id, '__untagged__'), COALESCE(dt.topic_name, '未分类')
+            GROUP BY COALESCE(topic_id, '__untagged__'), CASE WHEN topic_id IS NULL THEN '未分类' ELSE topic_id END
             ON CONFLICT (ranking_date, topic_id)
             DO UPDATE SET
+                topic_name = EXCLUDED.topic_name,
                 total_labeled = EXCLUDED.total_labeled,
                 positive_count = EXCLUDED.positive_count,
                 negative_count = EXCLUDED.negative_count,

@@ -150,6 +150,7 @@ def cascade_label(content: str) -> Dict[str, Any]:
 
             # 在 raw_response 开头嵌入 token 信息供后续提取
             tok_meta = f"[tokens: prompt={prompt_tokens}, completion={completion_tokens}]\n"
+            topic = parsed.get("topic") or None
             result = {
                 "has_profession": has_prof,
                 "professions": json.dumps(professions, ensure_ascii=False),
@@ -159,6 +160,7 @@ def cascade_label(content: str) -> Dict[str, Any]:
                 "mentioned_profession": mentioned_prof,
                 "opinion_target": mentioned_prof,
                 "target_type": "profession" if mentioned_prof else None,
+                "topic_id": topic,
                 "confidence_score": avg_conf,
                 "label_method": "llm",
                 "prompt_tokens": prompt_tokens,
