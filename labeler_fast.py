@@ -202,7 +202,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 50) -> List[Dict[str, Any]]:
     """异步批量标注，并发控制"""
     sem = asyncio.Semaphore(concurrency)
-    bucket = TokenBucket(rate=5, capacity=10)
+    bucket = TokenBucket(rate=7, capacity=14)
     limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
     async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
         tasks = [_call_api_async(client, item["content"], sem, bucket) for item in items]
