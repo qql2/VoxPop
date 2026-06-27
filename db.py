@@ -75,7 +75,7 @@ class AttitudeDB:
                 ON al.source_platform = '{platform}'
                 AND al.source_type = 'comment'
                 AND al.source_id = c.{id_field}::bigint
-            WHERE al.id IS NULL
+            WHERE (al.id IS NULL OR al.label_method = 'error')
               AND c.{id_field} > $1
               AND c.content IS NOT NULL
               AND length(trim(c.content)) > 0
@@ -102,7 +102,23 @@ class AttitudeDB:
                  raw_request, raw_response, labeled_at, batch_id)
             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
             ON CONFLICT (source_platform, source_type, source_id)
-            DO NOTHING
+            DO UPDATE SET
+                topic_id = EXCLUDED.topic_id,
+                mentioned_profession = EXCLUDED.mentioned_profession,
+                opinion_target = EXCLUDED.opinion_target,
+                target_type = EXCLUDED.target_type,
+                has_profession = EXCLUDED.has_profession,
+                professions = EXCLUDED.professions,
+                sentiment_polarity = EXCLUDED.sentiment_polarity,
+                emotion_finegrained = EXCLUDED.emotion_finegrained,
+                attitude_tendency = EXCLUDED.attitude_tendency,
+                label_method = EXCLUDED.label_method,
+                confidence_score = EXCLUDED.confidence_score,
+                raw_request = EXCLUDED.raw_request,
+                raw_response = EXCLUDED.raw_response,
+                labeled_at = EXCLUDED.labeled_at,
+                batch_id = EXCLUDED.batch_id
+            WHERE attitude_labels.label_method = 'error'
         """
         now = int(datetime.now().timestamp())
         async with self.pool.acquire() as conn:
