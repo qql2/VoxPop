@@ -94,6 +94,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
             "max_tokens": 400,
         }
         
+        retry_delays = [0.5, 2, 5]
         for attempt in range(3):
             try:
                 resp = await client.post(
@@ -104,7 +105,8 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                 )
                 if resp.status_code != 200:
                     if attempt < 2:
-                        await asyncio.sleep(0.5)
+                        delay = retry_delays[attempt] if resp.status_code != 429 else 5
+                        await asyncio.sleep(delay)
                         continue
                     return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
@@ -115,14 +117,16 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                 raw = data.get("choices", [{}])[0].get("message", {}).get("content", "")
                 if not raw:
                     if attempt < 2:
-                        await asyncio.sleep(0.5)
+                        delay = retry_delays[attempt]
+                        await asyncio.sleep(delay)
                         continue
                     return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
                 parsed = _parse_response(raw)
                 if not parsed:
                     if attempt < 2:
-                        await asyncio.sleep(0.5)
+                        delay = retry_delays[attempt]
+                        await asyncio.sleep(delay)
                         continue
                     return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
@@ -159,9 +163,10 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                     "raw_response": raw[:1000],
                     "raw_request": json.dumps(request_body, ensure_ascii=False)[:500],
                 }
-            except (json.JSONDecodeError, async_httpx.TimeoutException, async_httpx.RequestError):
+            except (json.JSONDecodeError, async_httpx.TimeoutException, async_httpx.RequestError) as e:
                 if attempt < 2:
-                    await asyncio.sleep(0.5)
+                    delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
+                    await asyncio.sleep(delay)
                     continue
                 return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
         
