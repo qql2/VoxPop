@@ -168,10 +168,11 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
         return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
 
 
-async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 5) -> List[Dict[str, Any]]:
+async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 50) -> List[Dict[str, Any]]:
     """异步批量标注，并发控制"""
     sem = asyncio.Semaphore(concurrency)
-    async with async_httpx.AsyncClient(timeout=15) as client:
+    limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
+    async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
         tasks = [_call_api_async(client, item["content"], sem) for item in items]
         labels = await asyncio.gather(*tasks)
     
