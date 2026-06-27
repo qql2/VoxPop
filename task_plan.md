@@ -1,41 +1,33 @@
 # Task Plan: VoxPop — 全岗位态度盘点
 
 ## Goal
-基于 BettaFish/MindSpider 的爬虫能力，对网友评论进行**关键词预过滤 → DeepSeek 全任务标注 → 话题聚合/职业排行 → 乐观/悲观排行盘点**。
+基于 BettaFish/MindSpider 爬虫，对网友评论进行**关键词预过滤 → LLM 全任务标注（职业提取+情感分析）→ 话题聚合/职业排行 → 乐观/悲观排行盘点**。
 
 ## Current Phase
-Phase 5 — 扩展数据源完成，等待合并排行
+Phase 6 — 数据已就绪，等待迭代分析
 
 ## Phases
+### 1-3: 调研+骨架+流水线 ✅
+### 4: 全量运行 ✅（wb/bili/xhs 2,691 条）
+### 5: 扩展数据源 ✅（知乎 5,350 条 via MindSpider CLI）
 
-### Phase 1: 方案调研 ✅ complete
-### Phase 2: 项目骨架 ✅ complete
-### Phase 3: 流水线实现 ✅ complete
-### Phase 4: 全量运行 ✅ complete
-- 2,691 条全量标注（wb/bili/xhs）
+### 6: 迭代分析 ⏳ in_progress
+- [x] 修复 labeler_fast.py Auth header bug
+- [x] 切换 API 至 DeepInfra Llama 3.1 8B
+- [x] 修复错误处理：重试失败 → error 标记，不退回中性
+- [x] zhihu 成功产出 1,380 LLM 标注（程序员 489 条、前端 45 条）
+- [ ] 合并全平台排行报告
+- [ ] 职业词典优化（覆盖更多网络用语）
+- **Status:** in_progress
 
-### Phase 5: 扩展数据源 ✅ complete
-- [x] 使用 **MindSpider CLI** 爬知乎（`--platforms zhihu`），不直接调 MediaCrawler
-- [x] 第一层 BroadTopicExtraction：从 12 个新闻源提取 63 个关键词 + 混入岗位关键词
-- [x] 第二层 DeepSentimentCrawling：搜索 10 个关键词爬取知乎
-- [x] 产出：141 条内容 + 5,219 条评论
-- [x] VoxPop 标注 zhihu 数据：5,000 条（0 LLM，全部关键词过滤跳过）
-- [x] db.py 添加 zhihu 平台支持
+## 永久规则
+- 爬数据只走 `MindSpider/main.py --deep-sentiment --platforms <平台>`
+- 代码改动及时 commit
+- 标注重试失败时标记 error，不退回中性
 
-### 永久规则
-- **爬数据只走 `MindSpider/main.py --deep-sentiment --platforms <支>`**
-- **代码改动及时 commit，便于回滚**
-
-### Phase 6: 定制与迭代 ⏳ pending
-- [ ] 合并知乎数据到完整排行
-- [ ] 调整职业关键词（zhihu 评论 0 LLM，词典覆盖不足）
-- [ ] 评估本地模型
-
-## Decisions Made
-| 决策 | 选定 | 原因 |
-|------|------|------|
-| 数据存储 | 独立表 | 不依赖 MindSpider 结构 |
-| 标注方案 | 级联（关键词预过滤+DeepSeek） | 省 60-70% LLM 调用 |
-| 并行标注 | asyncio httpx 5 并发 | 比串行快 5-10x |
-| 爬取策略 | 只走 MindSpider CLI | 保持架构完整 |
-| 代码记录 | 每次改动即 commit | 可回滚 |
+## Errors
+| Error | Resolution |
+|-------|------------|
+| labeler_fast.py 缺 Auth header | 修复后所有 401 变为正确调用 |
+| PackyAPI rate limit | 切换 DeepInfra |
+| Fallback 中性掩盖失败 | 改为 error 标记，可重标 |

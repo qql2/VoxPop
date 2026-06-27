@@ -173,9 +173,10 @@ def cascade_label(content: str) -> Dict[str, Any]:
             last_error = e
         finally:
             client.close()
-    # 所有重试都失败 → 兜底 neutral，不打断全量运行
+    # 所有重试都失败 → 标记 error，下轮可重标
     err_msg = f"label_error: {last_error}" if last_error else "label_error: max retries"
     fallback = dict(_EMPTY_LABEL)
+    fallback["label_method"] = "error"
     fallback["raw_response"] = err_msg
     fallback["confidence_score"] = 0.0
     return fallback

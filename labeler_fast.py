@@ -97,6 +97,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
             try:
                 resp = await client.post(
                     f"{settings.LLM_BASE_URL}/chat/completions",
+                    headers={"Authorization": f"Bearer {settings.LLM_API_KEY}"},
                     json=request_body,
                     timeout=15,
                 )
@@ -104,7 +105,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                     if attempt < 2:
                         await asyncio.sleep(0.5)
                         continue
-                    return dict(_EMPTY_LABEL)
+                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
                 data = resp.json()
                 usage = data.get("usage", {})
@@ -115,14 +116,14 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                     if attempt < 2:
                         await asyncio.sleep(0.5)
                         continue
-                    return dict(_EMPTY_LABEL)
+                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
                 parsed = _parse_response(raw)
                 if not parsed:
                     if attempt < 2:
                         await asyncio.sleep(0.5)
                         continue
-                    return dict(_EMPTY_LABEL)
+                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
                 
                 has_prof = parsed.get("has_profession", False)
                 professions = parsed.get("professions", [])
@@ -161,9 +162,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
                 if attempt < 2:
                     await asyncio.sleep(0.5)
                     continue
-                return dict(_EMPTY_LABEL)
+                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
         
-        return dict(_EMPTY_LABEL)
+        return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
 
 
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 5) -> List[Dict[str, Any]]:
