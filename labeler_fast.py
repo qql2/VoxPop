@@ -3,10 +3,33 @@ labeler_fast.py — 异步并行版标注器
 用 asyncio httpx 并发调用 DeepSeek API，比串行快 5-10 倍
 """
 import json, asyncio, time
+from asyncio import Lock
 import httpx as async_httpx
 from typing import List, Dict, Any, Optional
 from config import settings
 from professions import PROFESSION_KEYWORDS
+
+
+class TokenBucket:
+    """令牌桶 — 控制每秒最大请求数，避免爆发触发 429"""
+    def __init__(self, rate: float = 5, capacity: int = 10):
+        self.rate = rate
+        self.capacity = capacity
+        self.tokens = capacity
+        self.last_refill = time.monotonic()
+        self.lock = Lock()
+    
+    async def acquire(self):
+        while True:
+            async with self.lock:
+                now = time.monotonic()
+                elapsed = now - self.last_refill
+                self.tokens = min(self.capacity, self.tokens + elapsed * self.rate)
+                self.last_refill = now
+                if self.tokens >= 1:
+                    self.tokens -= 1
+                    return
+            await asyncio.sleep(1.0 / max(self.rate, 1))
 
 _SYSTEM_PROMPT = (
     "你是社会舆情分析专家，专攻「全岗位态度盘点」。"
@@ -77,12 +100,15 @@ def _parse_response(raw: str) -> Optional[dict]:
         return None
 
 
-async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: asyncio.Semaphore) -> Dict[str, Any]:
+async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: asyncio.Semaphore, bucket: TokenBucket = None) -> Dict[str, Any]:
     """单条异步 API 调用（带信号量控制并发）"""
     async with sem:
         content = content.strip()[:1000]
         if not content or not _keyword_match(content):
             return dict(_EMPTY_LABEL)
+        
+        if bucket:
+            await bucket.acquire()
         
         request_body = {
             "model": settings.LLM_MODEL,
@@ -176,9 +202,10 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: as
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 50) -> List[Dict[str, Any]]:
     """异步批量标注，并发控制"""
     sem = asyncio.Semaphore(concurrency)
+    bucket = TokenBucket(rate=5, capacity=10)
     limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
     async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
-        tasks = [_call_api_async(client, item["content"], sem) for item in items]
+        tasks = [_call_api_async(client, item["content"], sem, bucket) for item in items]
         labels = await asyncio.gather(*tasks)
     
     errors = 0
