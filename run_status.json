@@ -1,8 +1,8 @@
 {
-  "status": "dry_run",
-  "batch_id": "batch_eef92dc49803",
+  "status": "completed",
+  "batch_id": "batch_631e56a86acf",
   "date": "2026-06-29",
-  "total_labeled": 0,
+  "total_labeled": 347,
   "llm_count": 0,
   "model_count": 0,
   "errors": 0,
@@ -10,22 +10,22 @@
   "prompt_tokens": 0,
   "completion_tokens": 0,
   "estimated_cost": 0.0,
-  "elapsed_s": 0,
+  "elapsed_s": 158.0,
   "platforms": {
     "zhihu": {
-      "total": 313,
+      "total": 299,
       "llm": 0,
       "model": 0,
       "errors": 0
     },
     "weibo": {
-      "total": 131,
+      "total": 16,
       "llm": 0,
       "model": 0,
       "errors": 0
     },
     "bilibili": {
-      "total": 32,
+      "total": 29,
       "llm": 0,
       "model": 0,
       "errors": 0
@@ -39,6 +39,6 @@
   },
   "warnings": [],
   "alerts": [],
-  "_timestamp": "2026-06-29T00:28:35.203466",
-  "_time_str": "06-29 00:28"
+  "_timestamp": "2026-06-29T00:58:11.027063",
+  "_time_str": "06-29 00:58"
 }

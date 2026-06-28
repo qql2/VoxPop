@@ -95,6 +95,13 @@ _EMPTY_LABEL = {
 }
 
 
+def _error_label() -> dict:
+    """返回 error 标记的标签"""
+    return {"label_method": "error", "confidence_score": 0.0,
+            **{k: v for k, v in dict(_EMPTY_LABEL).items()
+               if k not in ('label_method', 'confidence_score')}}
+
+
 def _keyword_match(content: str) -> bool:
     text_lower = content.lower()
     for prof, keywords in PROFESSION_KEYWORDS.items():
@@ -150,32 +157,40 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
             )
             if bucket:
                 bucket.report(resp.status_code)
-            if resp.status_code != 200:
+
+            # ---------网络/服务端错误：重试---------
+            if resp.status_code == 429:
                 if attempt < 2:
-                    delay = retry_delays[attempt] if resp.status_code != 429 else 5
-                    await asyncio.sleep(delay)
+                    await asyncio.sleep(5)
                     continue
-                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+                return _error_label()
+            elif resp.status_code == 503 or resp.status_code >= 500:
+                if attempt < 2:
+                    await asyncio.sleep(retry_delays[attempt])
+                    continue
+                return _error_label()
+            elif resp.status_code != 200:
+                # 4xx 其他错误（除 429）：不重试
+                return _error_label()
 
             data = resp.json()
             usage = data.get("usage", {})
             prompt_tokens = usage.get("prompt_tokens", 0)
             completion_tokens = usage.get("completion_tokens", 0)
             raw = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+            # ---------API 成功但内容为空：重试---------
             if not raw:
                 if attempt < 2:
                     delay = retry_delays[attempt]
                     await asyncio.sleep(delay)
                     continue
-                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+                return _error_label()
 
+            # ---------解析失败（格式问题）：不重试---------
             parsed = _parse_response(raw)
             if not parsed or not isinstance(parsed, dict):
-                if attempt < 2:
-                    delay = retry_delays[attempt]
-                    await asyncio.sleep(delay)
-                    continue
-                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+                return _error_label()
 
             has_prof = parsed.get("has_profession", False)
             professions = parsed.get("professions", [])
@@ -215,9 +230,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
                 await asyncio.sleep(delay)
                 continue
-            return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+            return _error_label()
 
-    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+    return _error_label()
 
 
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[Dict[str, Any]]:
@@ -233,8 +248,7 @@ async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[
     total_completion = 0
     
     for i, (item, label) in enumerate(zip(items, labels)):
-        is_error = label.get("label_method") == "llm" and label.get("confidence_score", 1) == 0
-        if is_error:
+        if label.get("label_method") == "error":
             errors += 1
         total_prompt += label.get("prompt_tokens", 0)
         total_completion += label.get("completion_tokens", 0)

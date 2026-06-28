@@ -150,5 +150,137 @@
     "alerts": [],
     "_timestamp": "2026-06-29T00:28:35.203466",
     "_time_str": "06-29 00:28"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_82ad0b5bb5ba",
+    "date": "2026-06-29",
+    "total_labeled": 606,
+    "llm_count": 62,
+    "model_count": 192,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 31982,
+    "completion_tokens": 6508,
+    "estimated_cost": 0.008702,
+    "elapsed_s": 125.5,
+    "platforms": {
+      "zhihu": {
+        "total": 311,
+        "llm": 9,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 260,
+        "llm": 52,
+        "model": 192,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 32,
+        "llm": 1,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 3,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [],
+    "alerts": [],
+    "_timestamp": "2026-06-29T00:37:40.182248",
+    "_time_str": "06-29 00:37"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_e4034c7bbbb5",
+    "date": "2026-06-29",
+    "total_labeled": 358,
+    "llm_count": 6,
+    "model_count": 5,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 3045,
+    "completion_tokens": 511,
+    "estimated_cost": 0.000763,
+    "elapsed_s": 130.3,
+    "platforms": {
+      "zhihu": {
+        "total": 302,
+        "llm": 3,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 22,
+        "llm": 1,
+        "model": 5,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 31,
+        "llm": 2,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 3,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [],
+    "alerts": [],
+    "_timestamp": "2026-06-29T00:50:09.924092",
+    "_time_str": "06-29 00:50"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_631e56a86acf",
+    "date": "2026-06-29",
+    "total_labeled": 347,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 158.0,
+    "platforms": {
+      "zhihu": {
+        "total": 299,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 16,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 29,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 3,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [],
+    "alerts": [],
+    "_timestamp": "2026-06-29T00:58:11.027063",
+    "_time_str": "06-29 00:58"
   }
 ]
