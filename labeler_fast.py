@@ -170,7 +170,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
 
             parsed = _parse_response(raw)
-            if not parsed:
+            if not parsed or not isinstance(parsed, dict):
                 if attempt < 2:
                     delay = retry_delays[attempt]
                     await asyncio.sleep(delay)

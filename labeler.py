@@ -132,6 +132,8 @@ def cascade_label(content: str) -> Dict[str, Any]:
 
             clean = _clean_json(raw)
             parsed = json.loads(clean)
+            if not isinstance(parsed, dict):
+                raise RuntimeError(f"LLM 返回非 dict 类型: {type(parsed).__name__}")
 
             has_prof = parsed.get("has_profession", False)
             professions = parsed.get("professions", [])

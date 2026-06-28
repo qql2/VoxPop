@@ -1,6 +1,6 @@
 {
-  "status": "error",
-  "batch_id": "batch_a524558362c0",
+  "status": "dry_run",
+  "batch_id": "batch_eef92dc49803",
   "date": "2026-06-29",
   "total_labeled": 0,
   "llm_count": 0,
@@ -10,11 +10,35 @@
   "prompt_tokens": 0,
   "completion_tokens": 0,
   "estimated_cost": 0.0,
-  "elapsed_s": 24.5,
-  "platforms": {},
+  "elapsed_s": 0,
+  "platforms": {
+    "zhihu": {
+      "total": 313,
+      "llm": 0,
+      "model": 0,
+      "errors": 0
+    },
+    "weibo": {
+      "total": 131,
+      "llm": 0,
+      "model": 0,
+      "errors": 0
+    },
+    "bilibili": {
+      "total": 32,
+      "llm": 0,
+      "model": 0,
+      "errors": 0
+    },
+    "xhs": {
+      "total": 3,
+      "llm": 0,
+      "model": 0,
+      "errors": 0
+    }
+  },
   "warnings": [],
   "alerts": [],
-  "error": "'int' object has no attribute 'get'",
-  "_timestamp": "2026-06-29T00:27:12.112757",
-  "_time_str": "06-29 00:27"
+  "_timestamp": "2026-06-29T00:28:35.203466",
+  "_time_str": "06-29 00:28"
 }
