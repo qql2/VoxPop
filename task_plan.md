@@ -22,7 +22,9 @@ Phase 8 ✅ | Phase 9 ⏳ 待启动
 - [ ] attitude_labels 加 `posted_at` 列
 - [ ] insert_labels 同步写入原始发布时间
 - [ ] 回填存量数据
-- [ ] 网页查询加时间筛选（近7天/近30天/全部）
+- [x] attitude_labels 增加 posted_at 列（原始评论发布时间）
+- [x] 回填存量 41,050 条，覆盖率 100%
+- [x] 网页 SQL 查询新增「近7天」「近30天」时间筛选预设
 - [x] 爬虫搜索结果按时间排序（知乎/B站/小红书）
   - 知乎: sort=CREATE_TIME, search_time=ONE_WEEK
   - B站: order=LAST_PUBLISH

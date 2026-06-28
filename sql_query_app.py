@@ -91,6 +91,25 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 .history-table td{padding:8px 6px}
 /* 控制台终端样式 */
 .console{background:#1e1e1e;color:#d4d4d4;font:13px/1.5 Menlo,Consolas,monospace;padding:12px;border-radius:6px;height:500px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;margin-top:8px}
+/* 详情弹窗 */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.active{display:flex}
+.modal-box{background:#fff;border-radius:8px;width:90%;max-width:800px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 4px 24px rgba(0,0,0,0.2)}
+.modal-header{padding:12px 16px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{margin:0;font-size:15px}
+.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:#999;padding:0 4px}
+.modal-close:hover{color:#333}
+.modal-body{flex:1;overflow-y:auto;padding:12px 16px}
+.modal-body table{font-size:12px}
+.modal-body td,.modal-body th{padding:6px 8px}
+.comment-cell{max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#555}
+.comment-cell:hover{white-space:normal;background:#fafafa}
+.drill-link{color:#4f46e5;cursor:pointer;text-decoration:underline;font-weight:600}
+.drill-link:hover{color:#4338ca}
+.modal-empty{padding:40px;text-align:center;color:#999}
+.modal-loading{padding:40px;text-align:center;color:#999}
+.modal-stats{font-size:12px;color:#666;margin-bottom:8px}
+.summary-cell{font-size:12px;color:#888;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .console .ts{color:#6a9955}
 .console .err{color:#f48771}
 .console .info{color:#569cd6}
@@ -150,6 +169,19 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 </div>
 
 </div>
+
+<!-- 评论详情弹窗 -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeDetail()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-title">评论详情</h3>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div id="modal-stats" class="modal-stats" style="padding:8px 16px 0"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 <script>
 // ====== Tab 切换 ======
 function switchTab(name) {
@@ -202,10 +234,57 @@ async function runQuery() {
 let sortCol=-1,sortAsc=true;
 function renderTable(cols,rows){
   const c=document.getElementById('q-table'); sortCol=-1; sortAsc=true;
+  // 找出"积极"和"消极"列的下标
+  const posCol=cols.findIndex(x=>x==='积极'), negCol=cols.findIndex(x=>x==='消极');
+  const profCol=0; // 第一列通常是职业/话题名
   let h='<table><thead><tr>'+cols.map((c,i)=>'<th onclick="sortTable('+i+')">'+c+'</th>').join('')+'</tr></thead><tbody>';
-  rows.forEach(r=>{h+='<tr>'+r.map(v=>'<td>'+(v===null?'NULL':v)+'</td>').join('')+'</tr>'});
+  rows.forEach((r,ri)=>{
+    const profName=r[profCol]||'';
+    h+='<tr>'+r.map((v,ci)=>{
+      let val=v===null?'NULL':v;
+      // "积极"列 → 可点击下钻
+      if(ci===posCol && typeof v==='number' && v>0 && profName)
+        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'positive\')">'+v+'</a>';
+      // "消极"列 → 可点击下钻
+      else if(ci===negCol && typeof v==='number' && v>0 && profName)
+        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'negative\')">'+v+'</a>';
+      return '<td>'+val+'</td>';
+    }).join('')+'</tr>';
+  });
   c.innerHTML=h+'</tbody></table>';
 }
+
+// ====== 评论详情弹窗 ======
+let detailProfession='', detailSentiment='';
+async function openDetail(profession, sentiment) {
+  detailProfession=profession; detailSentiment=sentiment;
+  document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论';
+  document.getElementById('modal-stats').textContent='加载中…';
+  document.getElementById('modal-body').innerHTML='<div class="modal-loading">⟳ 查询中…</div>';
+  document.getElementById('modal-overlay').classList.add('active');
+  try {
+    const r=await fetch('/api/comment-detail',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({profession,sentiment,limit:50})
+    });
+    const d=await r.json();
+    if(d.error){document.getElementById('modal-body').innerHTML='<div class="modal-empty">❌ '+d.error+'</div>';return;}
+    if(!d.comments||d.comments.length===0){document.getElementById('modal-body').innerHTML='<div class="modal-empty">暂无相关评论</div>';document.getElementById('modal-stats').textContent='';return;}
+    document.getElementById('modal-stats').textContent='共 '+d.total+' 条（耗时 '+d.time_ms+'ms）';
+    let html='<table><thead><tr><th>平台</th><th>时间</th><th>情感</th><th>情绪</th><th>摘要</th><th>评论</th></tr></thead><tbody>';
+    d.comments.forEach(c=>{
+      html+='<tr><td>'+c.platform+'</td><td style="white-space:nowrap">'+c.posted_at_str+'</td><td>'+c.sentiment+'</td><td>'+(c.emotion||'-')+'</td><td class="summary-cell">'+escHtml(c.summary)+'</td><td class="comment-cell">'+escHtml(c.comment)+'</td></tr>';
+    });
+    html+='</tbody></table>';
+    document.getElementById('modal-body').innerHTML=html;
+  } catch(e){
+    document.getElementById('modal-body').innerHTML='<div class="modal-empty">❌ 请求失败: '+e.message+'</div>';
+  }
+}
+function closeDetail(){
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function sortTable(col){
   const t=document.querySelector('#q-table table'); if(!t)return;
   const b=t.querySelector('tbody'),rows=Array.from(b.querySelectorAll('tr'));
@@ -465,6 +544,93 @@ def api_stop(task_id):
         proc.terminate()
         return jsonify({"status": "terminated"})
     return jsonify({"error": "task not found"})
+
+
+# ====== API：评论详情下钻 ======
+@app.route('/api/comment-detail', methods=['POST'])
+def api_comment_detail():
+    data = request.json or {}
+    profession = data.get("profession", "")
+    sentiment = data.get("sentiment", "")
+    limit = min(data.get("limit", 50), 200)
+    days = data.get("days", 0)
+
+    if not profession or not sentiment:
+        return jsonify({"error": "profession 和 sentiment 不能为空"})
+
+    import time as _time
+    t0 = _time.time()
+    where_extra = ""
+    if days > 0:
+        cutoff = int(_time.time()) - days * 86400
+        where_extra = f"AND (al.posted_at IS NULL OR al.posted_at > {cutoff})"
+
+    sql = f"""
+        SELECT al.source_platform, al.source_id, al.mentioned_profession,
+               al.sentiment_polarity, al.emotion_finegrained, al.posted_at, al.raw_response,
+               COALESCE(zh.content, wb.content, bl.content, xh.content) AS comment_content
+        FROM attitude_labels al
+        LEFT JOIN zhihu_comment zh ON al.source_platform='zhihu' AND al.source_id = zh.id::bigint
+        LEFT JOIN weibo_note_comment wb ON al.source_platform='weibo' AND al.source_id = wb.id::bigint
+        LEFT JOIN bilibili_video_comment bl ON al.source_platform='bilibili' AND al.source_id = bl.id::bigint
+        LEFT JOIN xhs_note_comment xh ON al.source_platform='xhs' AND al.source_id = xh.id::bigint
+        WHERE al.mentioned_profession = $1 AND al.sentiment_polarity = $2 AND al.label_method='llm'
+          AND COALESCE(zh.content, wb.content, bl.content, xh.content) IS NOT NULL
+          {where_extra}
+        ORDER BY al.posted_at DESC NULLS LAST
+        LIMIT $3
+    """
+
+    async def run():
+        conn = await asyncpg.connect(**DB_CONFIG)
+        try:
+            rows = await conn.fetch(sql, profession, sentiment, limit)
+            result = []
+            for r in rows:
+                posted = r["posted_at"]
+                result.append({
+                    "platform": r["source_platform"],
+                    "profession": r["mentioned_profession"],
+                    "sentiment": r["sentiment_polarity"],
+                    "emotion": r["emotion_finegrained"],
+                    "posted_at": posted,
+                    "posted_at_str": (_time.strftime("%Y-%m-%d %H:%M", _time.localtime(posted // 1000 if posted > 10000000000 else posted)) if posted else "未知"),
+                    "comment": (r["comment_content"] or "")[:500],
+                    "summary": _extract_brief(r["raw_response"]),
+                })
+            return jsonify({
+                "comments": result,
+                "total": len(result),
+                "time_ms": int((_time.time() - t0) * 1000),
+            })
+        finally:
+            await conn.close()
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        return loop.run_until_complete(run())
+    except Exception as e:
+        return jsonify({"error": str(e)})
+    finally:
+        loop.close()
+
+
+def _extract_brief(raw_response: str) -> str:
+    """从 LLM 返回的 JSON 中提取 brief 字段"""
+    if not raw_response:
+        return ""
+    try:
+        # 去除 token 前缀
+        s = raw_response.strip()
+        if s.startswith("[tokens:"):
+            idx = s.find("\n")
+            if idx > 0:
+                s = s[idx:].strip()
+        parsed = json.loads(s)
+        return parsed.get("brief", "") or ""
+    except (json.JSONDecodeError, Exception):
+        return ""
 
 
 # ====== API：缓冲区（晚加入的客户端也能看到之前的内容） ======
