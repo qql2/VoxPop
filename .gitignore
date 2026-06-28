@@ -17,3 +17,5 @@ outputs/
 
 # OS
 .DS_Store
+run_history.json
+run_status.json
