@@ -95,11 +95,12 @@ _EMPTY_LABEL = {
 }
 
 
-def _error_label() -> dict:
-    """返回 error 标记的标签"""
+def _error_label(raw_response: str = None) -> dict:
+    """返回 error 标记的标签（保留现场 raw_response 用于排查）"""
     return {"label_method": "error", "confidence_score": 0.0,
+            "raw_response": (raw_response or "")[:500] if raw_response else None,
             **{k: v for k, v in dict(_EMPTY_LABEL).items()
-               if k not in ('label_method', 'confidence_score')}}
+               if k not in ('label_method', 'confidence_score', 'raw_response')}}
 
 
 def _keyword_match(content: str) -> bool:
@@ -163,15 +164,14 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 if attempt < 2:
                     await asyncio.sleep(5)
                     continue
-                return _error_label()
+                return _error_label(resp.text[:500])
             elif resp.status_code == 503 or resp.status_code >= 500:
                 if attempt < 2:
                     await asyncio.sleep(retry_delays[attempt])
                     continue
-                return _error_label()
+                return _error_label(resp.text[:500])
             elif resp.status_code != 200:
-                # 4xx 其他错误（除 429）：不重试
-                return _error_label()
+                return _error_label(resp.text[:500])
 
             data = resp.json()
             usage = data.get("usage", {})
@@ -194,7 +194,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                     delay = retry_delays[attempt]
                     await asyncio.sleep(delay)
                     continue
-                return _error_label()
+                return _error_label(raw)
 
             has_prof = parsed.get("has_profession", False)
             professions = parsed.get("professions", [])
@@ -234,9 +234,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
                 await asyncio.sleep(delay)
                 continue
-            return _error_label()
+            return _error_label(f"exception: {type(e).__name__}: {str(e)[:200]}")
 
-    return _error_label()
+    return _error_label("max_retries_exhausted")
 
 
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[Dict[str, Any]]:
