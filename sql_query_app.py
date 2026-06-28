@@ -56,7 +56,6 @@ h1{margin-bottom:12px;font-size:20px}
 .tabs{margin-bottom:16px;display:flex;gap:0;border-bottom:2px solid #e5e5e5}
 .tabs button{padding:8px 20px;border:none;background:none;cursor:pointer;font-size:14px;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px}
 .tabs button.active{color:#4f46e5;border-bottom-color:#4f46e5;font-weight:600}
-.tab-content{display:none}.tab-content.active{display:block}
 .presets{margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px}
 .presets button{padding:6px 14px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;font-size:13px}
 .presets button:hover{background:#e8e8e8}
@@ -123,18 +122,19 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 .platform-chips label{padding:4px 10px;border:1px solid #ccc;border-radius:12px;cursor:pointer;font-size:12px;background:#fff}
 .platform-chips label.active{background:#4f46e5;color:#fff;border-color:#4f46e5}
 </style>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.x/dist/cdn.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container" x-data="{ tab: 'console', modalOpen: false, modalProfession: '', modalSentiment: '' }">
 <h1>🔍 VoxPop 控制台</h1>
 <div class="tabs">
-  <button onclick="switchTab('sql')">📊 查询</button>
-  <button onclick="switchTab('status')">📋 运行状态</button>
-  <button class="active" onclick="switchTab('console')">🖥️ 控制台</button>
+  <button x-on:click="tab='sql'" x-bind:class="{'active': tab==='sql'}">📊 查询</button>
+  <button x-on:click="tab='status'; setTimeout(()=>loadStatus(),50)" x-bind:class="{'active': tab==='status'}">📋 运行状态</button>
+  <button x-on:click="tab='console'" x-bind:class="{'active': tab==='console'}">🖥️ 控制台</button>
 </div>
 
 <!-- SQL 查询 -->
-<div id="tab-sql" class="tab-content">
+<div x-show="tab==='sql'">
   <div class="presets" id="presets"></div>
   <textarea id="sql" placeholder="输入 SQL 查询语句…"></textarea>
   <div class="toolbar">
@@ -147,12 +147,12 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 </div>
 
 <!-- 运行状态 -->
-<div id="tab-status" class="tab-content">
+<div x-show="tab==='status'">
   <div id="status-content"><p class="loading">加载中…</p></div>
 </div>
 
 <!-- 控制台 -->
-<div id="tab-console" class="tab-content active">
+<div x-show="tab==='console'">
   <div class="ctrl-bar">
     <button class="btn-success" id="btn-crawl" onclick="startCrawl()">🕷️ 爬取</button>
     <button class="btn-primary" id="btn-label" onclick="startLabel()">🏷️ 标注</button>
@@ -171,11 +171,11 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 </div>
 
 <!-- 评论详情弹窗 -->
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeDetail()">
+<div class="modal-overlay" x-show="modalOpen" x-on:click.self="modalOpen=false">
   <div class="modal-box">
     <div class="modal-header">
       <h3 id="modal-title">评论详情</h3>
-      <button class="modal-close" onclick="closeDetail()">✕</button>
+      <button class="modal-close" x-on:click="modalOpen=false">✕</button>
     </div>
     <div id="modal-stats" class="modal-stats" style="padding:8px 16px 0"></div>
     <div class="modal-body" id="modal-body"></div>
@@ -183,15 +183,6 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 </div>
 
 <script>
-// ====== Tab 切换 ======
-function switchTab(name) {
-  document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  if (name === 'status') loadStatus();
-}
-
 // ====== SQL 查询 ======
 const PRESETS = [
   {label:'🏆 职业积极排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='negative')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 消极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
@@ -257,11 +248,12 @@ function renderTable(cols,rows){
 // ====== 评论详情弹窗 ======
 let detailProfession='', detailSentiment='';
 async function openDetail(profession, sentiment) {
-  detailProfession=profession; detailSentiment=sentiment;
+  const alpine = document.querySelector('[x-data]').__x.$data;
+  alpine.modalProfession=profession; alpine.modalSentiment=sentiment;
+  alpine.modalOpen=true;
   document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论';
   document.getElementById('modal-stats').textContent='加载中…';
   document.getElementById('modal-body').innerHTML='<div class="modal-loading">⟳ 查询中…</div>';
-  document.getElementById('modal-overlay').classList.add('active');
   try {
     const r=await fetch('/api/comment-detail',{
       method:'POST',headers:{'Content-Type':'application/json'},
@@ -280,9 +272,6 @@ async function openDetail(profession, sentiment) {
   } catch(e){
     document.getElementById('modal-body').innerHTML='<div class="modal-empty">❌ 请求失败: '+e.message+'</div>';
   }
-}
-function closeDetail(){
-  document.getElementById('modal-overlay').classList.remove('active');
 }
 function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function sortTable(col){
