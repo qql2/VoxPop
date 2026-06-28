@@ -296,15 +296,15 @@ function renderStatus(d){
   if(s.status==='never_run')return html+'<p>还没有运行过标注。</p></div>';
   html+='<div class="status-grid">';
   html+='<div class="metric"><div class="value">'+(s.total_labeled||0)+'</div><div class="label">本次标注</div></div>';
-  html+='<div class="metric"><div class="value">'+(s.llm_count||0)+'</div><div class="label">LLM</div></div>';
-  html+='<div class="metric"><div class="value">'+(s.errors||0)+'</div><div class="label">错误</div></div>';
+  html+='<div class="metric"><div class="value">'+(s.llm_count||0)+'</div><div class="label">LLM 成功</div></div>';
+  html+='<div class="metric"><div class="value">'+(s.errors||0)+'</div><div class="label">API 失败</div></div>';
   html+='<div class="metric"><div class="value">$'+((s.estimated_cost||0)).toFixed(6)+'</div><div class="label">费用</div></div>';
   html+='<div class="metric"><div class="value">'+(s.prompt_tokens||0).toLocaleString()+'</div><div class="label">输入 Token</div></div>';
   html+='<div class="metric"><div class="value">'+(s.completion_tokens||0).toLocaleString()+'</div><div class="label">输出 Token</div></div>';
   html+='<div class="metric"><div class="value">'+(s.elapsed_s||0)+'</div><div class="label">耗时(秒)</div></div>';
   html+='<div class="metric"><div class="value">'+Math.round((s.error_rate||0)*100)+'%</div><div class="label">错误率</div></div></div>';
   if(s.platforms&&Object.keys(s.platforms).length>0){
-    html+='<h3 style="font-size:14px;margin-bottom:8px">📦 各平台</h3><table><thead><tr><th>平台</th><th>总计</th><th>LLM</th><th>本地</th><th>错误</th></tr></thead><tbody>';
+    html+='<h3 style="font-size:14px;margin-bottom:8px">📦 各平台</h3><table><thead><tr><th>平台</th><th>总计</th><th>LLM✓</th><th>本地</th><th>API✗</th></tr></thead><tbody>';
     for(const[p,pd]of Object.entries(s.platforms))html+='<tr><td>'+p+'</td><td>'+(pd.total||0)+'</td><td>'+(pd.llm||0)+'</td><td>'+(pd.model||0)+'</td><td>'+(pd.errors||0)+'</td></tr>';
     html+='</tbody></table>';
   }
@@ -312,7 +312,7 @@ function renderStatus(d){
   if(s.alerts&&s.alerts.length)for(const a of s.alerts)html+='<div class="badge badge-err" style="margin:2px">🔴 '+a+'</div>';
   html+='</div>';
   if(h.length>0){
-    html+='<div class="status-card"><h3 style="font-size:14px;margin-bottom:8px">📜 历史（最近 '+h.length+' 次）</h3><table class="history-table"><thead><tr><th>时间</th><th>状态</th><th>条数</th><th>LLM</th><th>错误</th><th>费用</th><th>耗时</th></tr></thead><tbody>';
+    html+='<div class="status-card"><h3 style="font-size:14px;margin-bottom:8px">📜 历史（最近 '+h.length+' 次）</h3><table class="history-table"><thead><tr><th>时间</th><th>状态</th><th>条数</th><th>LLM✓</th><th>API✗</th><th>费用</th><th>耗时</th></tr></thead><tbody>';
     for(const r of[...h].reverse()){
       const rc=r.status==='completed'?'badge-ok':r.status==='failed'||r.status==='error'?'badge-err':'badge-info';
       html+='<tr><td>'+(r._time_str||'')+'</td><td><span class="badge '+rc+'">'+r.status+'</span></td><td>'+(r.total_labeled||0)+'</td><td>'+(r.llm_count||0)+'</td><td>'+(r.errors||0)+'</td><td>$'+((r.estimated_cost||0)).toFixed(6)+'</td><td>'+(r.elapsed_s||0)+'s</td></tr>';
