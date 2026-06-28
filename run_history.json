@@ -42,5 +42,69 @@
     "alerts": [],
     "_timestamp": "2026-06-28T23:19:29.511868",
     "_time_str": "06-28 23:19"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_07a4fcf48ba7",
+    "date": "2026-06-29",
+    "total_labeled": 1568,
+    "llm_count": 235,
+    "model_count": 968,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 118275,
+    "completion_tokens": 22496,
+    "estimated_cost": 0.031239,
+    "elapsed_s": 187.5,
+    "platforms": {
+      "zhihu": {
+        "total": 382,
+        "llm": 14,
+        "model": 55,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 1145,
+        "llm": 215,
+        "model": 913,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 38,
+        "llm": 6,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 3,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [],
+    "alerts": [],
+    "_timestamp": "2026-06-29T00:23:19.303383",
+    "_time_str": "06-29 00:23"
+  },
+  {
+    "status": "error",
+    "batch_id": "batch_a524558362c0",
+    "date": "2026-06-29",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 24.5,
+    "platforms": {},
+    "warnings": [],
+    "alerts": [],
+    "error": "'int' object has no attribute 'get'",
+    "_timestamp": "2026-06-29T00:27:12.112757",
+    "_time_str": "06-29 00:27"
   }
 ]
