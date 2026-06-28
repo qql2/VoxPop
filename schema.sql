@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS attitude_labels (
 
     labeled_at BIGINT NOT NULL,                  -- unix timestamp
     batch_id VARCHAR(64) DEFAULT NULL,           -- 批处理ID，方便追溯
+    posted_at BIGINT DEFAULT NULL,               -- 原始评论发布时间（unix timestamp）
 
     -- 幂等约束：同一条评论只标一次
     CONSTRAINT uk_attitude_label UNIQUE (source_platform, source_type, source_id)
@@ -88,4 +89,14 @@ CREATE TABLE IF NOT EXISTS attitude_batch_log (
     started_at BIGINT NOT NULL,
     finished_at BIGINT DEFAULT NULL,
     status VARCHAR(16) DEFAULT 'running'          -- running | completed | failed
+);
+
+-- 4. 爬取关键词去重表：同一关键词当天只爬一次
+CREATE TABLE IF NOT EXISTS crawled_keywords (
+    id BIGSERIAL PRIMARY KEY,
+    keyword VARCHAR(255) NOT NULL,
+    platform VARCHAR(32) NOT NULL,                 -- 'wb' | 'bili' | 'xhs' | 'zhihu'
+    crawl_date DATE NOT NULL,
+    crawled_at BIGINT NOT NULL,
+    CONSTRAINT uk_crawled UNIQUE (keyword, platform, crawl_date)
 );

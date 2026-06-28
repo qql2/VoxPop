@@ -205,6 +205,7 @@ def batch_cascade_label(items: List[Dict[str, Any]], batch_id: str) -> List[Dict
             "source_id": item["source_id"],
             "parent_id": item["parent_id"],
             "add_ts": item["add_ts"],
+            "posted_at": item.get("posted_at"),
             "batch_id": batch_id,
             "labeled_at": None,
         })

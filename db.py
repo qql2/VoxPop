@@ -47,21 +47,25 @@ class AttitudeDB:
             id_field = "id"
             content_field = "content"
             parent_id_field = "note_id"
+            posted_at_field = "create_time"
         elif platform == "bilibili":
             table = "bilibili_video_comment"
             id_field = "id"
             content_field = "content"
             parent_id_field = "video_id"
+            posted_at_field = "create_time"
         elif platform == "xhs":
             table = "xhs_note_comment"
             id_field = "id"
             content_field = "content"
             parent_id_field = "note_id"
+            posted_at_field = "create_time"
         elif platform == "zhihu":
             table = "zhihu_comment"
             id_field = "id"
             content_field = "content"
             parent_id_field = "comment_id"
+            posted_at_field = "publish_time"
         else:
             raise ValueError(f"不支持的平台: {platform}")
 
@@ -69,7 +73,7 @@ class AttitudeDB:
         sql = f"""
             SELECT c.{id_field} AS source_id, c.{content_field} AS content,
                    c.add_ts, c.{parent_id_field} AS parent_id, '{platform}' AS source_platform,
-                   'comment' AS source_type
+                   'comment' AS source_type, c.{posted_at_field} AS posted_at
             FROM {table} c
             LEFT JOIN attitude_labels al
                 ON al.source_platform = '{platform}'
@@ -99,8 +103,8 @@ class AttitudeDB:
                  has_profession, professions,
                  sentiment_polarity, emotion_finegrained,
                  attitude_tendency, label_method, confidence_score,
-                 raw_request, raw_response, labeled_at, batch_id)
-            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
+                 raw_request, raw_response, labeled_at, batch_id, posted_at)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)
             ON CONFLICT (source_platform, source_type, source_id)
             DO UPDATE SET
                 topic_id = EXCLUDED.topic_id,
@@ -117,7 +121,8 @@ class AttitudeDB:
                 raw_request = EXCLUDED.raw_request,
                 raw_response = EXCLUDED.raw_response,
                 labeled_at = EXCLUDED.labeled_at,
-                batch_id = EXCLUDED.batch_id
+                batch_id = EXCLUDED.batch_id,
+                posted_at = EXCLUDED.posted_at
             WHERE attitude_labels.label_method = 'error'
         """
         now = int(datetime.now().timestamp())
@@ -144,6 +149,7 @@ class AttitudeDB:
                         l.get("raw_response"),
                         now,
                         l.get("batch_id"),
+                        l.get("posted_at"),
                     )
                     for l in labels
                 ],
@@ -292,3 +298,32 @@ class AttitudeDB:
         """
         async with self.pool.acquire() as conn:
             await conn.execute(sql, rank_date)
+
+    # ---- 爬取关键词去重 ----
+
+    async def get_crawled_keywords(self, crawl_date=None):
+        """查询指定日期已爬过的关键词列表"""
+        from datetime import date
+        crawl_date = crawl_date or date.today()
+        sql = "SELECT keyword, platform FROM crawled_keywords WHERE crawl_date=$1"
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(sql, crawl_date)
+        return [dict(r) for r in rows]
+
+    async def mark_keywords_crawled(self, keywords: list, platform: str):
+        """标记一组关键词当天已爬"""
+        from datetime import date, datetime
+        now = int(datetime.now().timestamp())
+        crawl_date = date.today()
+        if not keywords:
+            return
+        sql = """
+            INSERT INTO crawled_keywords (keyword, platform, crawl_date, crawled_at)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (keyword, platform, crawl_date) DO NOTHING
+        """
+        async with self.pool.acquire() as conn:
+            await conn.executemany(
+                sql,
+                [(kw, platform, crawl_date, now) for kw in keywords]
+            )

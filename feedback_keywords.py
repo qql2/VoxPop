@@ -43,9 +43,29 @@ async def get_profession_stats():
 
 async def insert_daily_topic(keywords: list):
     import asyncpg
-    """将关键词写入 daily_topics 表，供 MindSpider 读取"""
+    """将关键词写入 daily_topics 表，供 MindSpider 读取（过滤当天已爬过的）"""
     conn = await asyncpg.connect(**DB_CONFIG)
-    topic_id = f"feedback_{date.today().isoformat()}"
+
+    # 查询当天已爬关键词
+    today = date.today()
+    crawled_rows = await conn.fetch("""
+        SELECT keyword FROM crawled_keywords WHERE crawl_date=$1
+    """, today)
+    crawled_set = set(r["keyword"] for r in crawled_rows)
+
+    if crawled_set:
+        before = len(keywords)
+        keywords = [kw for kw in keywords if kw not in crawled_set]
+        filtered = before - len(keywords)
+        if filtered:
+            print(f"  跳过 {filtered} 个当天已爬过的关键词")
+
+    if not keywords:
+        print("⚠️ 所有关键词今天都已爬过，无需重复爬取")
+        await conn.close()
+        return
+
+    topic_id = f"feedback_{today.isoformat()}"
     topic_name = "VoxPop 反馈闭环 — 低样本职业补充爬取"
     description = f"基于 VoxPop 标注结果，补充爬取样本量不足的职业。生成时间: {datetime.now().isoformat()}"
     keywords_json = json.dumps(keywords, ensure_ascii=False)

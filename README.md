@@ -50,7 +50,6 @@
 | 情感分布 | attitude_labels sentiment_polarity 聚合 |
 | 错误数 | labeler.py 重试失败 + 解析失败 |
 | 批次日志 | attitude_batch_log 表 |
-
 ## 输出
 
 ```

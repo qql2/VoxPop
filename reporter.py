@@ -51,7 +51,7 @@ async def generate_ranking_report(db: AttitudeDB, rank_date: date) -> str:
     for s in label_stats:
         p = s["source_platform"]
         if p not in plat_breakdown:
-            plat_breakdown[p] = {"total": 0, "llm": 0, "model": 0, "errors": 0}
+            plat_breakdown[p] = {"total": 0, "llm": 0, "model": 0, "error": 0, "errors": 0}
         plat_breakdown[p]["total"] += s["cnt"]
         plat_breakdown[p][s["label_method"]] += s["cnt"]
         plat_breakdown[p]["errors"] += s["errors"]
