@@ -187,9 +187,13 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                     continue
                 return _error_label()
 
-            # ---------解析失败（格式问题）：不重试---------
+            # ---------解析失败（格式问题）：重试---------
             parsed = _parse_response(raw)
             if not parsed or not isinstance(parsed, dict):
+                if attempt < 2:
+                    delay = retry_delays[attempt]
+                    await asyncio.sleep(delay)
+                    continue
                 return _error_label()
 
             has_prof = parsed.get("has_profession", False)
