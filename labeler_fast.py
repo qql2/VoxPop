@@ -11,13 +11,16 @@ from professions import PROFESSION_KEYWORDS
 
 
 class TokenBucket:
-    """令牌桶 — 控制每秒最大请求数，避免爆发触发 429"""
-    def __init__(self, rate: float = 5, capacity: int = 10):
+    """动态令牌桶 — 自动调速，高失败率缩容，成功后扩容"""
+    def __init__(self, rate: float = 30, capacity: int = 60, min_rate: float = 1, max_rate: float = 60):
         self.rate = rate
         self.capacity = capacity
+        self.min_rate = min_rate
+        self.max_rate = max_rate
         self.tokens = capacity
         self.last_refill = time.monotonic()
         self.lock = Lock()
+        self.success_since_last_error = 0
     
     async def acquire(self):
         while True:
@@ -30,6 +33,23 @@ class TokenBucket:
                     self.tokens -= 1
                     return
             await asyncio.sleep(1.0 / max(self.rate, 1))
+    
+    def report(self, status_code: int):
+        """报告 API 响应码，触发自动调速"""
+        if status_code == 429:
+            new_rate = max(self.min_rate, self.rate * 0.7)
+            if new_rate != self.rate:
+                self.rate = new_rate
+                self.capacity = int(self.rate * 2)
+            self.success_since_last_error = 0
+        elif status_code == 200:
+            self.success_since_last_error += 1
+            if self.success_since_last_error >= 10:
+                new_rate = min(self.max_rate, self.rate + 0.5)
+                if new_rate != self.rate:
+                    self.rate = new_rate
+                    self.capacity = int(self.rate * 2)
+                self.success_since_last_error = 0
 
 _SYSTEM_PROMPT = (
     "你是社会舆情分析专家，专攻「全岗位态度盘点」。"
@@ -100,112 +120,112 @@ def _parse_response(raw: str) -> Optional[dict]:
         return None
 
 
-async def _call_api_async(client: async_httpx.AsyncClient, content: str, sem: asyncio.Semaphore, bucket: TokenBucket = None) -> Dict[str, Any]:
-    """单条异步 API 调用（带信号量控制并发）"""
-    async with sem:
-        content = content.strip()[:1000]
-        if not content or not _keyword_match(content):
-            return dict(_EMPTY_LABEL)
-        
-        if bucket:
-            await bucket.acquire()
-        
-        request_body = {
-            "model": settings.LLM_MODEL,
-            "messages": [
-                {"role": "system", "content": _SYSTEM_PROMPT},
-                {"role": "user", "content": content},
-            ],
-            "temperature": 0.1,
-            "max_tokens": 400,
-        }
-        
-        retry_delays = [0.5, 2, 5]
-        for attempt in range(3):
-            try:
-                resp = await client.post(
-                    f"{settings.LLM_BASE_URL}/chat/completions",
-                    headers={"Authorization": f"Bearer {settings.LLM_API_KEY}"},
-                    json=request_body,
-                    timeout=15,
-                )
-                if resp.status_code != 200:
-                    if attempt < 2:
-                        delay = retry_delays[attempt] if resp.status_code != 429 else 5
-                        await asyncio.sleep(delay)
-                        continue
-                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
-                
-                data = resp.json()
-                usage = data.get("usage", {})
-                prompt_tokens = usage.get("prompt_tokens", 0)
-                completion_tokens = usage.get("completion_tokens", 0)
-                raw = data.get("choices", [{}])[0].get("message", {}).get("content", "")
-                if not raw:
-                    if attempt < 2:
-                        delay = retry_delays[attempt]
-                        await asyncio.sleep(delay)
-                        continue
-                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
-                
-                parsed = _parse_response(raw)
-                if not parsed:
-                    if attempt < 2:
-                        delay = retry_delays[attempt]
-                        await asyncio.sleep(delay)
-                        continue
-                    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
-                
-                has_prof = parsed.get("has_profession", False)
-                professions = parsed.get("professions", [])
-                
-                if has_prof and professions:
-                    first = professions[0]
-                    mentioned_prof = first["name"]
-                    sentiment = first["sentiment"]
-                    emotion = first.get("emotion", "indifference")
-                    confs = [p.get("confidence", 0.5) for p in professions]
-                    avg_conf = min(confs)
-                else:
-                    mentioned_prof = None
-                    sentiment = "neutral"
-                    emotion = "indifference"
-                    avg_conf = 0.5
-                
-                return {
-                    "has_profession": has_prof,
-                    "professions": json.dumps(professions, ensure_ascii=False),
-                    "sentiment_polarity": sentiment,
-                    "emotion_finegrained": emotion,
-                    "attitude_tendency": "support" if sentiment == "positive" else ("oppose" if sentiment == "negative" else "neutral"),
-                    "mentioned_profession": mentioned_prof,
-                    "opinion_target": mentioned_prof,
-                    "topic_id": parsed.get("topic") or None,
-                    "target_type": "profession" if mentioned_prof else None,
-                    "confidence_score": avg_conf,
-                    "label_method": "llm",
-                    "prompt_tokens": prompt_tokens,
-                    "completion_tokens": completion_tokens,
-                    "raw_response": raw[:1000],
-                    "raw_request": json.dumps(request_body, ensure_ascii=False)[:500],
-                }
-            except (json.JSONDecodeError, async_httpx.TimeoutException, async_httpx.RequestError) as e:
+async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket: TokenBucket = None) -> Dict[str, Any]:
+    """单条异步 API 调用（TokenBucket 限流）"""
+    content = content.strip()[:1000]
+    if not content or not _keyword_match(content):
+        return dict(_EMPTY_LABEL)
+
+    if bucket:
+        await bucket.acquire()
+
+    request_body = {
+        "model": settings.LLM_MODEL,
+        "messages": [
+            {"role": "system", "content": _SYSTEM_PROMPT},
+            {"role": "user", "content": content},
+        ],
+        "temperature": 0.1,
+        "max_tokens": 400,
+    }
+
+    retry_delays = [0.5, 2, 5]
+    for attempt in range(3):
+        try:
+            resp = await client.post(
+                f"{settings.LLM_BASE_URL}/chat/completions",
+                headers={"Authorization": f"Bearer {settings.LLM_API_KEY}"},
+                json=request_body,
+                timeout=15,
+            )
+            if bucket:
+                bucket.report(resp.status_code)
+            if resp.status_code != 200:
                 if attempt < 2:
-                    delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
+                    delay = retry_delays[attempt] if resp.status_code != 429 else 5
                     await asyncio.sleep(delay)
                     continue
                 return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
-        
-        return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+
+            data = resp.json()
+            usage = data.get("usage", {})
+            prompt_tokens = usage.get("prompt_tokens", 0)
+            completion_tokens = usage.get("completion_tokens", 0)
+            raw = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            if not raw:
+                if attempt < 2:
+                    delay = retry_delays[attempt]
+                    await asyncio.sleep(delay)
+                    continue
+                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+
+            parsed = _parse_response(raw)
+            if not parsed:
+                if attempt < 2:
+                    delay = retry_delays[attempt]
+                    await asyncio.sleep(delay)
+                    continue
+                return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+
+            has_prof = parsed.get("has_profession", False)
+            professions = parsed.get("professions", [])
+
+            if has_prof and professions:
+                first = professions[0]
+                mentioned_prof = first["name"]
+                sentiment = first["sentiment"]
+                emotion = first.get("emotion", "indifference")
+                confs = [p.get("confidence", 0.5) for p in professions]
+                avg_conf = min(confs)
+            else:
+                mentioned_prof = None
+                sentiment = "neutral"
+                emotion = "indifference"
+                avg_conf = 0.5
+
+            return {
+                "has_profession": has_prof,
+                "professions": json.dumps(professions, ensure_ascii=False),
+                "sentiment_polarity": sentiment,
+                "emotion_finegrained": emotion,
+                "attitude_tendency": "support" if sentiment == "positive" else ("oppose" if sentiment == "negative" else "neutral"),
+                "mentioned_profession": mentioned_prof,
+                "opinion_target": mentioned_prof,
+                "topic_id": parsed.get("topic") or None,
+                "target_type": "profession" if mentioned_prof else None,
+                "confidence_score": avg_conf,
+                "label_method": "llm",
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "raw_response": raw[:1000],
+                "raw_request": json.dumps(request_body, ensure_ascii=False)[:500],
+            }
+        except (json.JSONDecodeError, async_httpx.TimeoutException, async_httpx.RequestError) as e:
+            if attempt < 2:
+                delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
+                await asyncio.sleep(delay)
+                continue
+            return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
+
+    return {"label_method": "error", "confidence_score": 0.0, **{k:v for k,v in dict(_EMPTY_LABEL).items() if k not in ('label_method', 'confidence_score')}}
 
 
-async def batch_label_async(items: List[Dict[str, Any]], batch_id: str, concurrency: int = 50) -> List[Dict[str, Any]]:
-    """异步批量标注，并发控制"""
-    sem = asyncio.Semaphore(concurrency)
-    bucket = TokenBucket(rate=7, capacity=14)
+async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[Dict[str, Any]]:
+    """异步批量标注，TokenBucket 限流"""
+    bucket = TokenBucket(rate=30, capacity=60)
     limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
     async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
-        tasks = [_call_api_async(client, item["content"], sem, bucket) for item in items]
+        tasks = [_call_api_async(client, item["content"], bucket) for item in items]
         labels = await asyncio.gather(*tasks)
     
     errors = 0
