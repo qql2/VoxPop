@@ -236,17 +236,38 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
 
 
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[Dict[str, Any]]:
-    """异步批量标注，TokenBucket 限流"""
+    """异步批量标注，TokenBucket 限流
+    先处理关键词过滤（不调 API），再处理 LLM 调用，
+    避免 0 LLM 时被 gather 阻塞。
+    """
     bucket = TokenBucket(rate=30, capacity=60)
-    limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
-    async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
-        tasks = [_call_api_async(client, item["content"], bucket) for item in items]
-        labels = await asyncio.gather(*tasks)
-    
+
+    # 预分类：关键词过滤的直出，需调 API 的集中处理
+    labels = [None] * len(items)
+    api_items: List[int] = []  # (index, item) 只保留需调 API 的
+    for i, item in enumerate(items):
+        content = item["content"].strip()[:1000]
+        if not content or not _keyword_match(content):
+            labels[i] = dict(_EMPTY_LABEL)
+        else:
+            api_items.append(i)
+
+    # API 调用（仅在有必要时）
+    if api_items:
+        limits = async_httpx.Limits(max_connections=200, max_keepalive_connections=50)
+        async with async_httpx.AsyncClient(timeout=15, limits=limits) as client:
+            tasks = [_call_api_async(client, items[idx]["content"], bucket) for idx in api_items]
+            api_labels = await asyncio.gather(*tasks)
+        for pos, idx in enumerate(api_items):
+            labels[idx] = api_labels[pos]
+    else:
+        # 全部关键词过滤，无需创建 HTTP client
+        pass
+
+    # 统计+附加上下文
     errors = 0
     total_prompt = 0
     total_completion = 0
-    
     for i, (item, label) in enumerate(zip(items, labels)):
         if label.get("label_method") == "error":
             errors += 1
@@ -262,7 +283,7 @@ async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[
             "batch_id": batch_id,
             "labeled_at": None,
         })
-    
+
     return labels, errors, total_prompt, total_completion
 
 
