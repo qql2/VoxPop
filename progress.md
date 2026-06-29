@@ -49,6 +49,32 @@
 - **测试数据**：50 并发，HTTP 200 率 100%，但解析成功率 ~10%
 - **建议**：换更大模型（如 70B）或换 API 提供商
 
+## Phase 10: 关键词分级调度（2026-06-29）
+
+### 问题
+`daily_topics` 按 `extract_date` 匹配，跨天没写 `--apply` 就没关键词爬。热门和冷门关键词没区分。
+
+### 方案
+- 新建 `crawl_schedule` 表：`(keyword, platform, interval_days, last_crawled_at)`
+- 每关键词独立爬取间隔，默认 1 天
+- `run_crawl.py` 重构：读调度 → 写 daily_topics → 爬 → 标记 → 更新时间
+- `feedback_keywords.py --apply` 写入 `crawl_schedule`，不再写 `daily_topics`
+- `--all` 参数强制爬取（忽略调度间隔）
+- 已迁移 30 关键词 × 4 平台 = 120 条
+
+### 文件改动
+| 文件 | 改动 |
+|------|------|
+| schema.sql | 新增 crawl_schedule 表 |
+| db.py | 新增 get_due_keywords / upsert_schedule / mark_schedule_crawled |
+| run_crawl.py | 重构：调度 → daily_topics → 爬取 → 更新时间 |
+| feedback_keywords.py | --apply 改为写 crawl_schedule |
+
+### 关键文件职责（更新）
+| 文件 | 作用 |
+|------|------|
+| run_crawl.py | 爬虫调度入口（按间隔过滤到期关键词） |
+
 ### 调试规范（memory）
 - 新增持久化 memory：`debug-error-labels.md`
 - 规则：调试错误时永远先查 `attitude_labels.raw_response`，不直接调 API

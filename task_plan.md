@@ -14,7 +14,7 @@ Phase 10 — 爬虫调度系统（设计中）
 - 关键词当日去重
 - `json_object` 模式标注（99%+ 成功率）
 
-## Phase 10: 爬虫调度系统 ⏳ 设计中
+## Phase 10: 爬虫调度系统 ✅
 
 ### 问题
 当前: `daily_topics` 表只有 `extract_date`，MindSpider 只查当天的。跨天没写 `--apply` 就没关键词爬。
