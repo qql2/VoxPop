@@ -125,7 +125,7 @@ async def run():
                     await db.insert_labels(labels)
 
                     # 打印前几条 error 的 raw_response 帮助快速定位
-                    samples = [l.get("raw_response","")[:120] for l in labels if l.get("label_method")=="error"][:3]
+                    samples = [(l.get("raw_response") or "")[:120] for l in labels if l.get("label_method")=="error"][:3]
                     for s in samples:
                         print(f"  ⚠️ error 示例: {s}")
 

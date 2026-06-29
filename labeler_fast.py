@@ -60,7 +60,8 @@ _SYSTEM_PROMPT = (
     "2. 非工作岗位的对象(如公司、国家、个人、产品)不标记\n"
     "3. 隐含职业指代也要识别(如「穿制服的」→警察、「白大褂」→医生)\n"
     "4. 一条评论可能涉及多个职业，需独立标注\n"
-    "5. 重要：职业名称必须标准化，同一岗位的不同叫法统一为最常见的规范名称。例如：前端/前端开发/前端开发者/前端工程师→前端工程师，码农/程序猿/IT民工→程序员，老师/教师/教书匠→教师，医生/大夫/医师→医生，外卖员/骑手/送餐员→外卖员，保姆/阿姨/育儿嫂→保姆，老板/领导/经理/上司→管理岗，公务/事业编/体制内→公务员，护士/护理师→护士，运营/小编/新媒体→运营"
+    "5. 重要：职业名称必须标准化，同一岗位的不同叫法统一为最常见的规范名称。例如：前端/前端开发/前端开发者/前端工程师→前端工程师，码农/程序猿/IT民工→程序员，老师/教师/教书匠→教师，医生/大夫/医师→医生，外卖员/骑手/送餐员→外卖员，保姆/阿姨/育儿嫂→保姆，老板/领导/经理/上司→管理岗，公务/事业编/体制内→公务员，护士/护理师→护士，运营/小编/新媒体→运营\n\n"
+    "你必须调用 analyze_attitude function 输出分析结果，不要输出其他文字。"
 )
 
 
@@ -116,7 +117,7 @@ _EMPTY_LABEL = {
 def _error_label(raw_response: str = None) -> dict:
     """返回 error 标记的标签（保留现场 raw_response 用于排查）"""
     return {"label_method": "error", "confidence_score": 0.0,
-            "raw_response": (raw_response or "")[:500] if raw_response else None,
+            "raw_response": (raw_response or "")[:500],
             **{k: v for k, v in dict(_EMPTY_LABEL).items()
                if k not in ('label_method', 'confidence_score', 'raw_response')}}
 

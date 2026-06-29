@@ -471,5 +471,67 @@
     ],
     "_timestamp": "2026-06-29T18:47:13.942940",
     "_time_str": "06-29 18:47"
+  },
+  {
+    "status": "error",
+    "batch_id": "batch_9314a35dd6db",
+    "date": "2026-06-29",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 63.0,
+    "platforms": {},
+    "warnings": [],
+    "alerts": [],
+    "error": "'NoneType' object is not subscriptable",
+    "_timestamp": "2026-06-29T22:04:55.651106",
+    "_time_str": "06-29 22:04"
+  },
+  {
+    "status": "failed",
+    "batch_id": "batch_5f881c8bdc31",
+    "date": "2026-06-29",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 40.2,
+    "platforms": {},
+    "warnings": [],
+    "alerts": [
+      "[zhihu] 第1批错误率 82% (>50%)，立即停止（90 条已落盘可查）"
+    ],
+    "_timestamp": "2026-06-29T22:06:03.720250",
+    "_time_str": "06-29 22:06"
+  },
+  {
+    "status": "failed",
+    "batch_id": "batch_c312ba1dae5c",
+    "date": "2026-06-29",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0.0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 36.3,
+    "platforms": {},
+    "warnings": [],
+    "alerts": [
+      "[zhihu] 第1批错误率 88% (>50%)，立即停止（79 条已落盘可查）"
+    ],
+    "_timestamp": "2026-06-29T22:08:29.005458",
+    "_time_str": "06-29 22:08"
   }
 ]
