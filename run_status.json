@@ -1,21 +1,44 @@
 {
-  "status": "failed",
-  "batch_id": "batch_c312ba1dae5c",
+  "status": "completed",
+  "batch_id": "batch_f5b455331cea",
   "date": "2026-06-29",
-  "total_labeled": 0,
-  "llm_count": 0,
+  "total_labeled": 127,
+  "llm_count": 126,
   "model_count": 0,
-  "errors": 0,
-  "error_rate": 0.0,
-  "prompt_tokens": 0,
-  "completion_tokens": 0,
-  "estimated_cost": 0.0,
-  "elapsed_s": 36.3,
-  "platforms": {},
+  "errors": 1,
+  "error_rate": 0.0079,
+  "prompt_tokens": 49324,
+  "completion_tokens": 10072,
+  "estimated_cost": 0.013442,
+  "elapsed_s": 26.0,
+  "platforms": {
+    "zhihu": {
+      "total": 79,
+      "llm": 78,
+      "model": 0,
+      "errors": 1
+    },
+    "weibo": {
+      "total": 16,
+      "llm": 16,
+      "model": 0,
+      "errors": 0
+    },
+    "bilibili": {
+      "total": 29,
+      "llm": 29,
+      "model": 0,
+      "errors": 0
+    },
+    "xhs": {
+      "total": 3,
+      "llm": 3,
+      "model": 0,
+      "errors": 0
+    }
+  },
   "warnings": [],
-  "alerts": [
-    "[zhihu] 第1批错误率 88% (>50%)，立即停止（79 条已落盘可查）"
-  ],
-  "_timestamp": "2026-06-29T22:08:29.005458",
-  "_time_str": "06-29 22:08"
+  "alerts": [],
+  "_timestamp": "2026-06-29T22:34:50.743672",
+  "_time_str": "06-29 22:34"
 }
