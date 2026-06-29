@@ -125,7 +125,7 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.x/dist/cdn.min.js"></script>
 </head>
 <body>
-<div class="container" x-data="{ tab: 'console', modalOpen: false, modalProfession: '', modalSentiment: '' }">
+<div class="container" x-data="{ tab: 'console' }">
 <h1>🔍 VoxPop 控制台</h1>
 <div class="tabs">
   <button x-on:click="tab='sql'" x-bind:class="{'active': tab==='sql'}">📊 查询</button>
@@ -170,12 +170,12 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 
 </div>
 
-<!-- 评论详情弹窗 -->
-<div class="modal-overlay" x-show="modalOpen" x-on:click.self="modalOpen=false">
+<!-- 评论详情弹窗（纯 JS 控制，不依赖 Alpine） -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)document.getElementById('modal-overlay').style.display='none'" style="display:none">
   <div class="modal-box">
     <div class="modal-header">
       <h3 id="modal-title">评论详情</h3>
-      <button class="modal-close" x-on:click="modalOpen=false">✕</button>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').style.display='none'">✕</button>
     </div>
     <div id="modal-stats" class="modal-stats" style="padding:8px 16px 0"></div>
     <div class="modal-body" id="modal-body"></div>
@@ -249,9 +249,7 @@ function renderTable(cols,rows){
 // ====== 评论详情弹窗 ======
 let detailProfession='', detailSentiment='';
 async function openDetail(profession, sentiment) {
-  const alpine = document.querySelector('[x-data]').__x.$data;
-  alpine.modalProfession=profession; alpine.modalSentiment=sentiment;
-  alpine.modalOpen=true;
+  document.getElementById('modal-overlay').style.display='flex';
   document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论';
   document.getElementById('modal-stats').textContent='加载中…';
   document.getElementById('modal-body').innerHTML='<div class="modal-loading">⟳ 查询中…</div>';
