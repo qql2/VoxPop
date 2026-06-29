@@ -136,6 +136,22 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 <!-- SQL 查询 -->
 <div x-show="tab==='sql'">
   <div class="presets" id="presets"></div>
+  <div class="filter-bar" style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+    <select id="filter-time" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px">
+      <option value="0">📅 全部时间</option>
+      <option value="7">近 7 天</option>
+      <option value="30">近 30 天</option>
+      <option value="90">近 90 天</option>
+    </select>
+    <select id="filter-samples" style="padding:4px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px">
+      <option value="0">📊 不限样本量</option>
+      <option value="5">≥ 5 条</option>
+      <option value="10" selected>≥ 10 条</option>
+      <option value="20">≥ 20 条</option>
+      <option value="50">≥ 50 条</option>
+    </select>
+    <span class="info" style="font-size:12px;line-height:28px">过滤条件在执行时自动附加到 SQL</span>
+  </div>
   <textarea id="sql" placeholder="输入 SQL 查询语句…"></textarea>
   <div class="toolbar">
     <button class="btn-primary" onclick="runQuery()">▶ 执行</button>
@@ -184,30 +200,73 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 
 <script>
 // ====== SQL 查询 ======
-const PRESETS = [
-  {label:'🏆 职业积极排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='negative')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 消极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
+let sortCol=-1,sortAsc=true;
+const BASE_PRESETS = [
+  {label:'🏆 职业排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='negative')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 消极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
   {label:'📈 积极率最高',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 积极率 DESC, 讨论量 DESC;`},
   {label:'📉 消极率最高',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='negative')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 消极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 消极率 DESC, 讨论量 DESC;`},
   {label:'📊 全部排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, COUNT(*) FILTER (WHERE sentiment_polarity='neutral') AS 中性, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='negative')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 消极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
   {label:'📋 平台数据',sql:`SELECT source_platform AS 平台, COUNT(*) AS 总计, COUNT(*) FILTER (WHERE label_method='llm') AS LLM, COUNT(*) FILTER (WHERE label_method='model') AS 本地, COUNT(*) FILTER (WHERE label_method='error') AS 错误, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极 FROM attitude_labels GROUP BY source_platform ORDER BY 平台;`},
   {label:'🔎 搜索',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession ILIKE '%程序员%' GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
-  {label:'📅 近7天排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL AND posted_at > EXTRACT(EPOCH FROM NOW() - INTERVAL '7 days') GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
-  {label:'📅 近30天排行',sql:`SELECT mentioned_profession AS 职业, COUNT(*) AS 讨论量, COUNT(*) FILTER (WHERE sentiment_polarity='positive') AS 积极, COUNT(*) FILTER (WHERE sentiment_polarity='negative') AS 消极, ROUND(COUNT(*) FILTER (WHERE sentiment_polarity='positive')::numeric / NULLIF(COUNT(*),0) * 100, 1) AS 积极率 FROM attitude_labels WHERE label_method='llm' AND mentioned_profession IS NOT NULL AND posted_at > EXTRACT(EPOCH FROM NOW() - INTERVAL '30 days') GROUP BY mentioned_profession ORDER BY 讨论量 DESC;`},
-  {label:'🕷️ 爬虫调度',sql:`SELECT cs.keyword AS 关键词, cs.platform AS 平台, cs.interval_days AS 间隔天, to_timestamp(cs.last_crawled_at)::date AS 上次爬取, to_timestamp(cs.last_crawled_at + cs.interval_days * 86400)::date AS 下次到期, CASE WHEN cs.last_crawled_at IS NULL OR cs.last_crawled_at + cs.interval_days * 86400 <= EXTRACT(EPOCH FROM NOW())::bigint THEN '🔴 到期' ELSE '✅ 未到期' END AS 状态 FROM crawl_schedule cs ORDER BY 下次到期 NULLS FIRST, 关键词;`},
+  {label:'🕷️ 爬虫调度（不受过滤影响）',sql:`SELECT cs.keyword AS 关键词, cs.platform AS 平台, cs.interval_days AS 间隔天, to_timestamp(cs.last_crawled_at)::date AS 上次爬取, to_timestamp(cs.last_crawled_at + cs.interval_days * 86400)::date AS 下次到期, CASE WHEN cs.last_crawled_at IS NULL OR cs.last_crawled_at + cs.interval_days * 86400 <= EXTRACT(EPOCH FROM NOW())::bigint THEN '🔴 到期' ELSE '✅ 未到期' END AS 状态 FROM crawl_schedule cs ORDER BY 下次到期 NULLS FIRST, 关键词;`},
 ];
-PRESETS.forEach(p => {
+const presetsEl = document.getElementById('presets');
+BASE_PRESETS.forEach(p => {
   const btn = document.createElement('button');
   btn.textContent = p.label;
-  btn.onclick = () => { document.getElementById('sql').value = p.sql; runQuery(); };
-  document.getElementById('presets').appendChild(btn);
+  btn.onclick = () => {
+    document.getElementById('sql').value = p.sql;
+    runQuery();
+  };
+  presetsEl.appendChild(btn);
 });
 document.getElementById('sql').addEventListener('keydown', e => {
   if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) runQuery();
 });
 
+function applyFilters(baseSql) {
+  const timeVal = parseInt(document.getElementById('filter-time').value);
+  const sampleVal = parseInt(document.getElementById('filter-samples').value);
+  let sql = baseSql;
+  const upper = sql.toUpperCase();
+
+  // 时间过滤：加 posted_at 条件
+  if (timeVal > 0 && upper.includes('ATTITUDE_LABELS')) {
+    const clause = ` posted_at > EXTRACT(EPOCH FROM NOW() - INTERVAL '${timeVal} days')`;
+    const groupPos = upper.indexOf('GROUP BY');
+    const wherePos = upper.indexOf('WHERE');
+    if (wherePos >= 0 && groupPos >= 0) {
+      sql = sql.slice(0, groupPos - 1) + ' AND' + clause + ' ' + sql.slice(groupPos - 1);
+    } else if (wherePos >= 0) {
+      sql = sql.trimEnd() + ' AND' + clause;
+    } else if (groupPos >= 0) {
+      sql = sql.slice(0, groupPos - 1) + ' WHERE' + clause + ' ' + sql.slice(groupPos - 1);
+    } else {
+      sql = sql.trimEnd() + ' WHERE' + clause;
+    }
+  }
+
+  // 样本量过滤：加 HAVING
+  if (sampleVal > 0 && sql.toUpperCase().includes('GROUP BY') && !sql.toUpperCase().includes('crawl_schedule')) {
+    const upper2 = sql.toUpperCase();
+    const havingPos = upper2.indexOf('HAVING');
+    if (havingPos >= 0) {
+      const orderPos = upper2.indexOf('ORDER BY', havingPos);
+      const end = orderPos >= 0 ? orderPos : sql.length;
+      sql = sql.slice(0, havingPos) + `HAVING COUNT(*) > ${sampleVal} ` + sql.slice(end);
+    } else {
+      const orderPos = upper2.indexOf('ORDER BY', upper2.indexOf('GROUP BY'));
+      const insert = orderPos >= 0 ? orderPos : sql.length;
+      sql = sql.slice(0, insert) + ` HAVING COUNT(*) > ${sampleVal} ` + sql.slice(insert);
+    }
+  }
+  return sql;
+}
+
 async function runQuery() {
-  const sql = document.getElementById('sql').value.trim();
-  if (!sql) return;
+  const baseSql = document.getElementById('sql').value.trim();
+  if (!baseSql) return;
+  const sql = applyFilters(baseSql);
   const el = e => document.getElementById(e);
   el('q-error').style.display = 'none';
   el('q-status').textContent = '执行中…';
@@ -223,9 +282,8 @@ async function runQuery() {
   } catch(e) { el('q-error').textContent='❌ 请求失败: '+e.message; el('q-error').style.display='block'; el('q-table').innerHTML=''; el('q-status').textContent=''; }
 }
 
-let sortCol=-1,sortAsc=true;
 function renderTable(cols,rows){
-  const c=document.getElementById('q-table'); sortCol=-1; sortAsc=true;
+  const c=document.getElementById('q-table');
   // 找出"积极"和"消极"列的下标
   const posCol=cols.findIndex(x=>x==='积极'), negCol=cols.findIndex(x=>x==='消极');
   const profCol=0; // 第一列通常是职业/话题名
@@ -236,10 +294,10 @@ function renderTable(cols,rows){
       let val=v===null?'NULL':v;
       // "积极"列 → 可点击下钻
       if(ci===posCol && typeof v==='number' && v>0 && profName)
-        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'positive\')">'+v+'</a>';
+        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'positive\','+document.getElementById(\'filter-time\').value+')">'+v+'</a>';
       // "消极"列 → 可点击下钻
       else if(ci===negCol && typeof v==='number' && v>0 && profName)
-        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'negative\')">'+v+'</a>';
+        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'negative\','+document.getElementById(\'filter-time\').value+')">'+v+'</a>';
       return '<td>'+val+'</td>';
     }).join('')+'</tr>';
   });
@@ -248,15 +306,15 @@ function renderTable(cols,rows){
 
 // ====== 评论详情弹窗 ======
 let detailProfession='', detailSentiment='';
-async function openDetail(profession, sentiment) {
+async function openDetail(profession, sentiment, days) {
   document.getElementById('modal-overlay').style.display='flex';
-  document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论';
+  document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论'+(days>0?`（近${days}天）`:'');
   document.getElementById('modal-stats').textContent='加载中…';
   document.getElementById('modal-body').innerHTML='<div class="modal-loading">⟳ 查询中…</div>';
   try {
     const r=await fetch('/api/comment-detail',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({profession,sentiment,limit:50})
+      body:JSON.stringify({profession,sentiment,limit:500,days})
     });
     const d=await r.json();
     if(d.error){document.getElementById('modal-body').innerHTML='<div class="modal-empty">❌ '+d.error+'</div>';return;}
@@ -540,7 +598,7 @@ def api_comment_detail():
     data = request.json or {}
     profession = data.get("profession", "")
     sentiment = data.get("sentiment", "")
-    limit = min(data.get("limit", 50), 200)
+    limit = min(data.get("limit", 99999), 99999)
     days = data.get("days", 0)
 
     if not profession or not sentiment:
