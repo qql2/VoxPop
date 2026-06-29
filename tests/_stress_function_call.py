@@ -1,13 +1,26 @@
 #!/usr/bin/env python3
-"""DeepInfra function calling 压力测试 — 验证并发是否导致空响应"""
+"""DeepInfra function calling 压力测试 — 历史记录，当前改用 json_object 模式"""
+# 此文件保留作为踩坑记录，详见 findings.md
+# 结论：DeepInfra function calling 不可靠，已改用 response_format json_object
 import asyncio, json, sys, time
 sys.path.insert(0, '/Users/Admin1/VoxPop')
-from labeler_fast import _SYSTEM_PROMPT, _ANALYZE_TOOL
 from config import settings
 import httpx as async_httpx
 
-TOOL = [_ANALYZE_TOOL]
-FULL_PROMPT = _SYSTEM_PROMPT + '\n\n你必须调用 analyze_attitude function 输出分析结果，不要输出其他文字。'
+TOOL = [{
+    "type": "function",
+    "function": {
+        "name": "analyze_attitude",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "has_profession": {"type": "boolean"},
+                "professions": {"type": "array", "items": {"type": "object"}},
+            }
+        }
+    }
+}]
+FULL_PROMPT = "分析评论中涉及的工作岗位及对该岗位表达的态度。必须调用 analyze_attitude function。"
 
 COMMENTS = [
     "程序员这行太卷了，35岁就被优化",
