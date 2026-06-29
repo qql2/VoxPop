@@ -327,3 +327,62 @@ class AttitudeDB:
                 sql,
                 [(kw, platform, crawl_date, now) for kw in keywords]
             )
+
+    # ---- 爬虫调度 ----
+
+    async def get_due_keywords(self, platforms: list = None):
+        """查出到期的关键词（上次爬取时间 + 间隔 <= 现在）"""
+        from datetime import datetime
+        now = int(datetime.now().timestamp())
+        if platforms:
+            placeholders = ",".join(f"${i+1}" for i in range(len(platforms)))
+            sql = f"""
+                SELECT keyword, platform, interval_days
+                FROM crawl_schedule
+                WHERE (last_crawled_at IS NULL OR last_crawled_at + interval_days * 86400 <= {now})
+                  AND platform IN ({placeholders})
+                ORDER BY last_crawled_at NULLS FIRST
+            """
+            async with self.pool.acquire() as conn:
+                rows = await conn.fetch(sql, *platforms)
+        else:
+            sql = f"""
+                SELECT keyword, platform, interval_days
+                FROM crawl_schedule
+                WHERE (last_crawled_at IS NULL OR last_crawled_at + interval_days * 86400 <= {now})
+                ORDER BY last_crawled_at NULLS FIRST
+            """
+            async with self.pool.acquire() as conn:
+                rows = await conn.fetch(sql)
+        return [dict(r) for r in rows]
+
+    async def upsert_schedule(self, keywords: list, platform: str, interval_days: int = 1):
+        """批量添加/更新关键词调度"""
+        from datetime import datetime
+        now = int(datetime.now().timestamp())
+        if not keywords:
+            return
+        sql = """
+            INSERT INTO crawl_schedule (keyword, platform, interval_days, created_at)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (keyword, platform) DO UPDATE SET
+                interval_days = EXCLUDED.interval_days
+        """
+        async with self.pool.acquire() as conn:
+            await conn.executemany(
+                sql,
+                [(kw, platform, interval_days, now) for kw in keywords]
+            )
+
+    async def mark_schedule_crawled(self, keywords: list, platform: str):
+        """标记一组关键词已爬"""
+        from datetime import datetime
+        now = int(datetime.now().timestamp())
+        if not keywords:
+            return
+        sql = """
+            UPDATE crawl_schedule SET last_crawled_at = $1
+            WHERE keyword = ANY($2::text[]) AND platform = $3
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(sql, now, list(keywords), platform)

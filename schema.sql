@@ -100,3 +100,14 @@ CREATE TABLE IF NOT EXISTS crawled_keywords (
     crawled_at BIGINT NOT NULL,
     CONSTRAINT uk_crawled UNIQUE (keyword, platform, crawl_date)
 );
+
+-- 5. 爬虫调度表：每个关键词独立爬取间隔
+CREATE TABLE IF NOT EXISTS crawl_schedule (
+    id BIGSERIAL PRIMARY KEY,
+    keyword VARCHAR(255) NOT NULL,
+    platform VARCHAR(32) NOT NULL,                 -- 'wb' | 'bili' | 'xhs' | 'zhihu'
+    interval_days INT NOT NULL DEFAULT 1,           -- 爬取间隔天数
+    last_crawled_at BIGINT DEFAULT NULL,            -- 上次爬取时间戳
+    created_at BIGINT NOT NULL,
+    CONSTRAINT uk_schedule UNIQUE (keyword, platform)
+);

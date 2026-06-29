@@ -42,46 +42,32 @@ async def get_profession_stats():
     return {r["mentioned_profession"]: r["cnt"] for r in rows}
 
 async def insert_daily_topic(keywords: list):
-    import asyncpg
-    """将关键词写入 daily_topics 表，供 MindSpider 读取（过滤当天已爬过的）"""
-    conn = await asyncpg.connect(**DB_CONFIG)
-
-    # 查询当天已爬关键词
-    today = date.today()
-    crawled_rows = await conn.fetch("""
-        SELECT keyword FROM crawled_keywords WHERE crawl_date=$1
-    """, today)
-    crawled_set = set(r["keyword"] for r in crawled_rows)
-
-    if crawled_set:
-        before = len(keywords)
-        keywords = [kw for kw in keywords if kw not in crawled_set]
-        filtered = before - len(keywords)
-        if filtered:
-            print(f"  跳过 {filtered} 个当天已爬过的关键词")
-
-    if not keywords:
-        print("⚠️ 所有关键词今天都已爬过，无需重复爬取")
-        await conn.close()
-        return
-
-    topic_id = f"feedback_{today.isoformat()}"
-    topic_name = "VoxPop 反馈闭环 — 低样本职业补充爬取"
-    description = f"基于 VoxPop 标注结果，补充爬取样本量不足的职业。生成时间: {datetime.now().isoformat()}"
-    keywords_json = json.dumps(keywords, ensure_ascii=False)
-    now_ts = int(datetime.now().timestamp())
-    
+    """将关键词写入 crawl_schedule 表（不再写 daily_topics，由 run_crawl.py 统一调度）"""
+    from db import AttitudeDB
+    db = AttitudeDB()
+    await db.connect()
     try:
-        await conn.execute("""
-            INSERT INTO daily_topics (topic_id, topic_name, topic_description, keywords, extract_date, add_ts, last_modify_ts)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            ON CONFLICT (topic_id) DO UPDATE SET
-                keywords = $4, topic_description = $3, last_modify_ts = $7
-        """, topic_id, topic_name, description, keywords_json, date.today(), now_ts, now_ts)
-        print(f"✅ 已写入 daily_topics: topic_id={topic_id}")
-        print(f"   关键词数: {len(keywords)}")
+        # 过滤当天已爬过的
+        today = date.today()
+        crawled = await db.get_crawled_keywords(today)
+        crawled_set = set(r["keyword"] for r in crawled)
+        if crawled_set:
+            before = len(keywords)
+            keywords = [kw for kw in keywords if kw not in crawled_set]
+            if before - len(keywords):
+                print(f"  跳过 {before - len(keywords)} 个当天已爬过的关键词")
+
+        if not keywords:
+            print("⚠️ 所有关键词今天都已爬过，无需重复爬取")
+            return
+
+        # 写入调度表（所有平台）
+        for p in ["wb", "bili", "xhs", "zhihu"]:
+            await db.upsert_schedule(keywords, p, interval_days=1)
+        print(f"✅ 已写入 crawl_schedule: {len(keywords)} 个关键词（interval_days=1）")
+        print(f"   运行 python3 run_crawl.py 即可爬取到期的关键词")
     finally:
-        await conn.close()
+        await db.close()
 
 async def main():
     import asyncpg
@@ -161,9 +147,9 @@ async def main():
     # --apply 参数：写入 daily_topics
     if "--apply" in sys.argv:
         await insert_daily_topic(suggest_kw)
-        print(f"\n运行 MindSpider 爬取:")
-        print(f"  cd ~/BettaFish/MindSpider")
-        print(f"  python3 main.py --deep-sentiment --platforms zhihu")
+        print(f"\n运行爬虫:")
+        print(f"  python3 run_crawl.py                   # 爬到期关键词")
+        print(f"  python3 run_crawl.py --all              # 强制爬全部")
     else:
         print(f"\n要写入 daily_topics 并触发爬取，加上 --apply 参数:")
         print(f"  python3 feedback_keywords.py --apply")
