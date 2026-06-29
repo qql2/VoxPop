@@ -124,23 +124,14 @@ async def run():
                     # 先保存 labels（含 raw_response），保留现场
                     await db.insert_labels(labels)
 
-                    # 打印前几条 error 的 raw_response 帮助快速定位
                     samples = [(l.get("raw_response") or "")[:120] for l in labels if l.get("label_method")=="error"][:3]
                     for s in samples:
                         print(f"  ⚠️ error 示例: {s}")
 
-                    msg = (
-                        f"[{platform}] 第{round_num}批错误率 {batch_error_rate:.0%} "
-                        f"(>{MAX_ERROR_RATE:.0%})，立即停止（{errors} 条已落盘可查）"
-                    )
+                    msg = f"[{platform}] 第{round_num}批错误率 {batch_error_rate:.0%} (>50%)，跳过该平台（{errors} 条已落盘）"
                     print(f"🔴 {msg}")
-                    run_result["alerts"].append(msg)
-                    notify_error(msg)
-                    run_result["status"] = "failed"
-                    run_result["elapsed_s"] = round(time.monotonic() - t0, 1)
-                    write_status(run_result)
-                    await db.finish_batch_log(f"{batch_id}_{platform}")
-                    return
+                    run_result["warnings"].append(msg)
+                    break  # 跳过当前平台，继续下一个
 
                 await db.insert_labels(labels)
 
