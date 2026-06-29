@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "batch_id": "batch_c361c949ed12",
+  "batch_id": "batch_b84561cd93c4",
   "date": "2026-06-29",
   "total_labeled": 0,
   "llm_count": 0,
@@ -10,12 +10,12 @@
   "prompt_tokens": 0,
   "completion_tokens": 0,
   "estimated_cost": 0.0,
-  "elapsed_s": 69.8,
+  "elapsed_s": 54.4,
   "platforms": {},
   "warnings": [],
   "alerts": [
     "[zhihu] 第1批错误率 100% (>50%)，立即停止"
   ],
-  "_timestamp": "2026-06-29T01:27:11.591871",
-  "_time_str": "06-29 01:27"
+  "_timestamp": "2026-06-29T17:59:29.781250",
+  "_time_str": "06-29 17:59"
 }

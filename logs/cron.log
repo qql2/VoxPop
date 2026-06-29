@@ -1,0 +1,2 @@
+🔴 [zhihu] 第1批错误率 100% (>50%)，立即停止
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "🔴 VoxPop 标注已停止" message "[zhihu] 第1批错误率 100% (>50%)，立即停止" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
