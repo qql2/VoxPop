@@ -98,12 +98,11 @@ def run_status():
 def api_crawl():
     platforms = request.json.get('platforms', ['wb', 'bili', 'xhs', 'zhihu'])
     task_id = uuid.uuid4().hex[:12]
-    minsider_dir = os.path.expanduser("~/MindSpider")
-    cmd = ['/usr/bin/python3', 'main.py', '--deep-sentiment', '--platforms'] + platforms
+    cmd = ['/usr/bin/python3', os.path.join(PROJECT_ROOT, 'run_crawl.py'), '--platforms'] + platforms
     env = os.environ.copy()
     env['PYTHONUNBUFFERED'] = '1'
     threading.Thread(
-        target=_run_process, args=(task_id, cmd, minsider_dir),
+        target=_run_process, args=(task_id, cmd, PROJECT_ROOT),
         kwargs={'env': env}, daemon=True
     ).start()
     return jsonify({"task_id": task_id, "message": f"爬取已启动: {', '.join(platforms)}"})
