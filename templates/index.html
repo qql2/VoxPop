@@ -100,7 +100,7 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 <div class="tabs">
   <button x-on:click="tab='sql'" x-bind:class="{'active': tab==='sql'}">📊 查询</button>
   <button x-on:click="tab='status'; setTimeout(()=>loadStatus(),50)" x-bind:class="{'active': tab==='status'}">📋 运行状态</button>
-	  <button x-on:click="tab=.wf.; setTimeout(()=>{loadWorkflow();loadCrawlHistory();},50)" x-bind:class="{'active': tab==='wf'}">🔄 工作流</button>
+	  <button onclick="loadWorkflow()" x-on:click="tab='wf'" x-bind:class="{'active': tab==='wf'}">🔄 工作流</button>
   <button x-on:click="tab='console'" x-bind:class="{'active': tab==='console'}">🖥️ 控制台</button>
 </div>
 
@@ -492,7 +492,7 @@ async function loadWorkflow() {
   try {
     var r = await fetch('/api/workflow/status');
     var d = await r.json();
-    el.innerHTML = renderWorkflow(d);
+    el.innerHTML = renderWorkflow(d); loadCrawlHistory();
   } catch(e) {
     el.innerHTML = '<div class="error" style="display:block">X ' + e.message + '</div>';
   }
@@ -542,43 +542,6 @@ async function loadCrawlHistory() {
     document.getElementById('crawl-history').innerHTML = html;
   } catch(e) {
     document.getElementById('crawl-history').innerHTML = '<p style="color:red">加载失败: ' + e.message + '</p>';
-  }
-}
-async function runFeedback() {
-
-  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
-  logConsole('🔍 运行反馈闭环...\n', 'info');
-  try {
-    var r = await fetch('/api/feedback', { method: 'POST' });
-    var d = await r.json();
-    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
-    logConsole('✅ 反馈闭环完成\n', 'ok');
-    loadWorkflow();
-  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
-}
-async function forceCrawl() {
-  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
-  logConsole('🚀 强制爬取全部关键词...\n', 'info');
-  try {
-    var r = await fetch('/api/crawl-all', { method: 'POST' });
-    var d = await r.json();
-    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
-    currentTaskId = d.task_id;
-    startStream(d.task_id);
-  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
-}
-
-
-// ====== 工作流 ======
-function goQueryTab() { Alpine.$data(document.querySelector('[x-data]')).tab = 'sql'; }
-async function loadWorkflow() {
-  var el = document.getElementById('wf-content');
-  try {
-    var r = await fetch('/api/workflow/status');
-    var d = await r.json();
-    el.innerHTML = renderWorkflow(d);
-  } catch(e) {
-    el.innerHTML = '<div class="error" style="display:block">X ' + e.message + '</div>';
   }
 }
 function renderWorkflow(d) {
