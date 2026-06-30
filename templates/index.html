@@ -100,7 +100,7 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 <div class="tabs">
   <button x-on:click="tab='sql'" x-bind:class="{'active': tab==='sql'}">📊 查询</button>
   <button x-on:click="tab='status'; setTimeout(()=>loadStatus(),50)" x-bind:class="{'active': tab==='status'}">📋 运行状态</button>
-	  <button x-on:click="tab='wf'; setTimeout(()=>loadWorkflow(),50)" x-bind:class="{'active': tab==='wf'}">🔄 工作流</button>
+	  <button x-on:click="tab=.wf.; setTimeout(()=>{loadWorkflow();loadCrawlHistory();},50)" x-bind:class="{'active': tab==='wf'}">🔄 工作流</button>
   <button x-on:click="tab='console'" x-bind:class="{'active': tab==='console'}">🖥️ 控制台</button>
 </div>
 
@@ -513,9 +513,39 @@ function renderWorkflow(d) {
     + '<div class="wf-stats">'
     + '<div class="wf-stat-card"><div class="val">' + (d.schedule_count || 0) + '</div><div class="lbl">调度关键词</div></div>'
     + '<div class="wf-stat-card"><div class="val">' + (d.total_labeled || 0).toLocaleString() + '</div><div class="lbl">总标注数</div></div>'
-    + '</div>';
+    + '</div>'
+    + '<h3 style="font-size:14px;margin:16px 0 8px">🕷️ 爬取历史</h3>'
+    + '<div id="crawl-history"><p class="loading">加载中…</p></div>';
+}
+
+async function loadCrawlHistory() {
+  try {
+    const r = await fetch('/api/crawl-history');
+    const d = await r.json();
+    var html = '';
+    if (d.platforms && d.platforms.length > 0) {
+      html += '<table style="font-size:12px;margin-bottom:12px"><thead><tr><th>平台</th><th>关键词</th><th>已爬</th><th>未爬</th><th>上次爬取</th></tr></thead><tbody>';
+      d.platforms.forEach(function(p) {
+        html += '<tr><td>' + p.platform + '</td><td>' + p.total_kw + '</td><td>' + p.crawled + '</td><td>' + p.never + '</td><td>' + p.last_time + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+    if (d.history && d.history.length > 0) {
+      html += '<table style="font-size:12px"><thead><tr><th>关键词</th><th>平台</th><th>间隔</th><th>上次爬取</th></tr></thead><tbody>';
+      d.history.slice(0, 30).forEach(function(h) {
+        html += '<tr><td>' + h.keyword + '</td><td>' + h.platform + '</td><td>' + h.interval_days + 'd</td><td>' + (h.last_date || '-') + ' ' + (h.last_time || '') + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p style="color:#999;font-size:13px">暂无爬取记录</p>';
+    }
+    document.getElementById('crawl-history').innerHTML = html;
+  } catch(e) {
+    document.getElementById('crawl-history').innerHTML = '<p style="color:red">加载失败: ' + e.message + '</p>';
+  }
 }
 async function runFeedback() {
+
   Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
   logConsole('🔍 运行反馈闭环...\n', 'info');
   try {
@@ -567,9 +597,39 @@ function renderWorkflow(d) {
     + '<div class="wf-stats">'
     + '<div class="wf-stat-card"><div class="val">' + (d.schedule_count || 0) + '</div><div class="lbl">调度关键词</div></div>'
     + '<div class="wf-stat-card"><div class="val">' + (d.total_labeled || 0).toLocaleString() + '</div><div class="lbl">总标注数</div></div>'
-    + '</div>';
+    + '</div>'
+    + '<h3 style="font-size:14px;margin:16px 0 8px">🕷️ 爬取历史</h3>'
+    + '<div id="crawl-history"><p class="loading">加载中…</p></div>';
+}
+
+async function loadCrawlHistory() {
+  try {
+    const r = await fetch('/api/crawl-history');
+    const d = await r.json();
+    var html = '';
+    if (d.platforms && d.platforms.length > 0) {
+      html += '<table style="font-size:12px;margin-bottom:12px"><thead><tr><th>平台</th><th>关键词</th><th>已爬</th><th>未爬</th><th>上次爬取</th></tr></thead><tbody>';
+      d.platforms.forEach(function(p) {
+        html += '<tr><td>' + p.platform + '</td><td>' + p.total_kw + '</td><td>' + p.crawled + '</td><td>' + p.never + '</td><td>' + p.last_time + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+    if (d.history && d.history.length > 0) {
+      html += '<table style="font-size:12px"><thead><tr><th>关键词</th><th>平台</th><th>间隔</th><th>上次爬取</th></tr></thead><tbody>';
+      d.history.slice(0, 30).forEach(function(h) {
+        html += '<tr><td>' + h.keyword + '</td><td>' + h.platform + '</td><td>' + h.interval_days + 'd</td><td>' + (h.last_date || '-') + ' ' + (h.last_time || '') + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    } else {
+      html += '<p style="color:#999;font-size:13px">暂无爬取记录</p>';
+    }
+    document.getElementById('crawl-history').innerHTML = html;
+  } catch(e) {
+    document.getElementById('crawl-history').innerHTML = '<p style="color:red">加载失败: ' + e.message + '</p>';
+  }
 }
 async function runFeedback() {
+
   Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
   logConsole('🔍 运行反馈闭环...\n', 'info');
   try {

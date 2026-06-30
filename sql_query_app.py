@@ -293,10 +293,12 @@ def workflow_status():
         finally:
             await conn.close()
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
     try:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         loop.run_until_complete(gather())
+    except Exception as e:
+        return jsonify({"error": str(e)})
     finally:
         loop.close()
 
@@ -307,6 +309,31 @@ def workflow_status():
         else:
             result[k] = "从未运行"
 
+    return jsonify(result)
+
+
+@app.route('/api/crawl-history')
+def crawl_history():
+    import time as _time
+    result = {"history": [], "platforms": []}
+    async def gather():
+        conn = await asyncpg.connect(**DB_CONFIG)
+        try:
+            rows = await conn.fetch("SELECT keyword, platform, interval_days, to_timestamp(last_crawled_at)::date as last_date, to_timestamp(last_crawled_at)::time as last_time FROM crawl_schedule WHERE last_crawled_at IS NOT NULL ORDER BY last_crawled_at DESC LIMIT 100")
+            result["history"] = [{**dict(r), "last_time": str(r["last_time"])[:5] if r["last_time"] else None} for r in rows]
+            agg = await conn.fetch("SELECT platform, COUNT(*) as total_kw, COUNT(*) FILTER (WHERE last_crawled_at IS NOT NULL) as crawled, COUNT(*) FILTER (WHERE last_crawled_at IS NULL) as never, MAX(last_crawled_at) as last_ts FROM crawl_schedule GROUP BY platform ORDER BY platform")
+            for r in agg:
+                d = dict(r)
+                d["last_time"] = _time.strftime("%m-%d %H:%M", _time.localtime(d["last_ts"])) if d["last_ts"] else "从未"
+                result["platforms"].append(d)
+        finally:
+            await conn.close()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(gather())
+    finally:
+        loop.close()
     return jsonify(result)
 
 
