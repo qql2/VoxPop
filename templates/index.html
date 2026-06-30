@@ -70,6 +70,21 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 .console .ok{color:#4ec9b0}
 .console .warn{color:#ce9178}
 .console .dim{color:#808080}
+/* 工作流样式 */
+.wf-flow{display:flex;gap:0;margin-bottom:24px;flex-wrap:wrap}
+.wf-step{flex:1;min-width:160px;text-align:center;padding:16px 12px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;position:relative;margin:4px}
+.wf-step .wf-icon{font-size:28px;margin-bottom:6px}
+.wf-step .wf-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.wf-step .wf-time{font-size:11px;color:#999}
+.wf-step .wf-btn{margin-top:8px;padding:4px 12px;border:none;border-radius:4px;cursor:pointer;font-size:12px}
+.wf-step .wf-btn:hover{opacity:0.8}
+.wf-step.active{border-color:#4f46e5;background:#eef2ff}
+.wf-arrow{display:flex;align-items:center;color:#ccc;font-size:18px;padding:0 2px}
+.wf-stats{display:flex;gap:16px;flex-wrap:wrap}
+.wf-stat-card{background:#fff;padding:12px 16px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.08);min-width:140px}
+.wf-stat-card .val{font-size:22px;font-weight:700}
+.wf-stat-card .lbl{font-size:12px;color:#666;margin-top:2px}
+
 .ctrl-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .ctrl-bar button{padding:8px 20px;border:none;border-radius:4px;cursor:pointer;font-size:13px}
 .ctrl-bar .running{opacity:0.6;pointer-events:none}
@@ -85,6 +100,7 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
 <div class="tabs">
   <button x-on:click="tab='sql'" x-bind:class="{'active': tab==='sql'}">📊 查询</button>
   <button x-on:click="tab='status'; setTimeout(()=>loadStatus(),50)" x-bind:class="{'active': tab==='status'}">📋 运行状态</button>
+	  <button x-on:click="tab='wf'; setTimeout(()=>loadWorkflow(),50)" x-bind:class="{'active': tab==='wf'}">🔄 工作流</button>
   <button x-on:click="tab='console'" x-bind:class="{'active': tab==='console'}">🖥️ 控制台</button>
 </div>
 
@@ -122,6 +138,10 @@ th.sorted-desc::after{content:' ▼';font-size:11px}
   <div id="status-content"><p class="loading">加载中…</p></div>
 </div>
 
+<!-- 工作流 -->
+<div x-show="tab==='wf'">
+  <div id="wf-content"><p class="loading">加载中…</p></div>
+</div>
 <!-- 控制台 -->
 <div x-show="tab==='console'">
   <div class="ctrl-bar">
@@ -259,10 +279,10 @@ function renderTable(cols,rows){
       let val=v===null?'NULL':v;
       // "积极"列 → 可点击下钻
       if(ci===posCol && typeof v==='number' && v>0 && profName)
-        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'positive\',0)">'+v+'</a>';
+        val='<a class="drill-link" data-prof="'+profName.replace(/"/g,'')+'" data-sent="positive" onclick="openDetail(this.dataset.prof,this.dataset.sent,document.getElementById(\'filter-time\').value)">'+v+'</a>';
       // "消极"列 → 可点击下钻
       else if(ci===negCol && typeof v==='number' && v>0 && profName)
-        val='<a class="drill-link" onclick="openDetail(\''+profName.replace(/'/g,"\\'")+'\',\'negative\',0)">'+v+'</a>';
+        val='<a class="drill-link" data-prof="'+profName.replace(/"/g,'')+'" data-sent="negative" onclick="openDetail(this.dataset.prof,this.dataset.sent,document.getElementById(\'filter-time\').value)">'+v+'</a>';
       return '<td>'+val+'</td>';
     }).join('')+'</tr>';
   });
@@ -272,6 +292,7 @@ function renderTable(cols,rows){
 // ====== 评论详情弹窗 ======
 let detailProfession='', detailSentiment='';
 async function openDetail(profession, sentiment, days) {
+  days = parseInt(days) || 0;
   document.getElementById('modal-overlay').style.display='flex';
   document.getElementById('modal-title').textContent=profession+' — '+(sentiment==='positive'?'积极':'消极')+' 评论'+(days>0?`（近${days}天）`:'');
   document.getElementById('modal-stats').textContent='加载中…';
@@ -465,6 +486,112 @@ async function stopTask() {
     await fetch('/api/stop/'+currentTaskId, { method:'POST' });
   } catch(e) {}
 }
+
+async function loadWorkflow() {
+  var el = document.getElementById('wf-content');
+  try {
+    var r = await fetch('/api/workflow/status');
+    var d = await r.json();
+    el.innerHTML = renderWorkflow(d);
+  } catch(e) {
+    el.innerHTML = '<div class="error" style="display:block">X ' + e.message + '</div>';
+  }
+}
+function renderWorkflow(d) {
+  var fb = d.feedback_last_run || '从未运行';
+  var cr = d.crawl_last_run || '从未运行';
+  var lb = d.label_last_run || '从未运行';
+  return '<div style="overflow-x:auto;padding:4px 0"><div class="wf-flow">'
+    + '<div class="wf-step"><div class="wf-icon">🔍</div><div class="wf-title">反馈闭环</div><div class="wf-time">上次: ' + fb + '</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="runFeedback()">▶ 运行</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">🕷️</div><div class="wf-title">爬虫调度</div><div class="wf-time">上次: ' + cr + '</div><button class="wf-btn" style="background:#16a34a;color:#fff" onclick="startCrawl()">按调度爬</button> <button class="wf-btn" style="background:#6b7280;color:#fff" onclick="forceCrawl()">--all</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">🏷️</div><div class="wf-title">自动标注</div><div class="wf-time">上次: ' + lb + '</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="startLabel()">▶ 运行</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">📊</div><div class="wf-title">查询展示</div><div class="wf-time">随时可用</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="goQueryTab()">📊 查排行</button></div>'
+    + '</div></div>'
+    + '<div class="wf-stats">'
+    + '<div class="wf-stat-card"><div class="val">' + (d.schedule_count || 0) + '</div><div class="lbl">调度关键词</div></div>'
+    + '<div class="wf-stat-card"><div class="val">' + (d.total_labeled || 0).toLocaleString() + '</div><div class="lbl">总标注数</div></div>'
+    + '</div>';
+}
+async function runFeedback() {
+  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
+  logConsole('🔍 运行反馈闭环...\n', 'info');
+  try {
+    var r = await fetch('/api/feedback', { method: 'POST' });
+    var d = await r.json();
+    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
+    logConsole('✅ 反馈闭环完成\n', 'ok');
+    loadWorkflow();
+  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
+}
+async function forceCrawl() {
+  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
+  logConsole('🚀 强制爬取全部关键词...\n', 'info');
+  try {
+    var r = await fetch('/api/crawl-all', { method: 'POST' });
+    var d = await r.json();
+    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
+    currentTaskId = d.task_id;
+    startStream(d.task_id);
+  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
+}
+
+
+// ====== 工作流 ======
+function goQueryTab() { Alpine.$data(document.querySelector('[x-data]')).tab = 'sql'; }
+async function loadWorkflow() {
+  var el = document.getElementById('wf-content');
+  try {
+    var r = await fetch('/api/workflow/status');
+    var d = await r.json();
+    el.innerHTML = renderWorkflow(d);
+  } catch(e) {
+    el.innerHTML = '<div class="error" style="display:block">X ' + e.message + '</div>';
+  }
+}
+function renderWorkflow(d) {
+  var fb = d.feedback_last_run || '从未运行';
+  var cr = d.crawl_last_run || '从未运行';
+  var lb = d.label_last_run || '从未运行';
+  return '<div style="overflow-x:auto;padding:4px 0"><div class="wf-flow">'
+    + '<div class="wf-step"><div class="wf-icon">🔍</div><div class="wf-title">反馈闭环</div><div class="wf-time">上次: ' + fb + '</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="runFeedback()">▶ 运行</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">🕷️</div><div class="wf-title">爬虫调度</div><div class="wf-time">上次: ' + cr + '</div><button class="wf-btn" style="background:#16a34a;color:#fff" onclick="startCrawl()">按调度爬</button> <button class="wf-btn" style="background:#6b7280;color:#fff" onclick="forceCrawl()">--all</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">🏷️</div><div class="wf-title">自动标注</div><div class="wf-time">上次: ' + lb + '</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="startLabel()">▶ 运行</button></div>'
+    + '<div class="wf-arrow">→</div>'
+    + '<div class="wf-step"><div class="wf-icon">📊</div><div class="wf-title">查询展示</div><div class="wf-time">随时可用</div><button class="wf-btn" style="background:#4f46e5;color:#fff" onclick="goQueryTab()">📊 查排行</button></div>'
+    + '</div></div>'
+    + '<div class="wf-stats">'
+    + '<div class="wf-stat-card"><div class="val">' + (d.schedule_count || 0) + '</div><div class="lbl">调度关键词</div></div>'
+    + '<div class="wf-stat-card"><div class="val">' + (d.total_labeled || 0).toLocaleString() + '</div><div class="lbl">总标注数</div></div>'
+    + '</div>';
+}
+async function runFeedback() {
+  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
+  logConsole('🔍 运行反馈闭环...\n', 'info');
+  try {
+    var r = await fetch('/api/feedback', { method: 'POST' });
+    var d = await r.json();
+    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
+    logConsole('✅ 反馈闭环完成\n', 'ok');
+    loadWorkflow();
+  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
+}
+async function forceCrawl() {
+  Alpine.$data(document.querySelector('[x-data]')).tab = 'console';
+  logConsole('🚀 强制爬取全部关键词...\n', 'info');
+  try {
+    var r = await fetch('/api/crawl-all', { method: 'POST' });
+    var d = await r.json();
+    if (d.error) { logConsole('X ' + d.error + '\n', 'err'); return; }
+    currentTaskId = d.task_id;
+    startStream(d.task_id);
+  } catch(e) { logConsole('X ' + e.message + '\n', 'err'); }
+}
+
 </script>
 </body>
 </html>

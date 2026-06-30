@@ -1,2 +1,19 @@
 🔴 [zhihu] 第1批错误率 100% (>50%)，立即停止
 [observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "🔴 VoxPop 标注已停止" message "[zhihu] 第1批错误率 100% (>50%)，立即停止" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2023.03]
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+  [weibo] 第1批: 500条 (LLM:102 本地:398 错误:0) 累计500
+  [weibo] 第2批: 500条 (LLM:188 本地:312 错误:0) 累计1000
+  [weibo] 第3批: 500条 (LLM:171 本地:327 错误:2) 累计1500
+  [weibo] 第4批: 500条 (LLM:148 本地:352 错误:0) 累计2000
+  [weibo] 第5批: 76条 (LLM:30 本地:46 错误:0) 累计2076
+
+聚合排行...
+排行: outputs/2026-06-30/ranking.json
+
+==================================================
+✅ 标注: 2076条 (LLM 639 / 本地 1435 / 错误 2)
+   Token: 输入 236210 / 输出 41666
+   成本: $0.060431
+   耗时: 92s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 2/2076 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds

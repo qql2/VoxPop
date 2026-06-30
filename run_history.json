@@ -1,94 +1,6 @@
 [
   {
     "status": "completed",
-    "batch_id": "batch_82ad0b5bb5ba",
-    "date": "2026-06-29",
-    "total_labeled": 606,
-    "llm_count": 62,
-    "model_count": 192,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 31982,
-    "completion_tokens": 6508,
-    "estimated_cost": 0.008702,
-    "elapsed_s": 125.5,
-    "platforms": {
-      "zhihu": {
-        "total": 311,
-        "llm": 9,
-        "model": 0,
-        "errors": 0
-      },
-      "weibo": {
-        "total": 260,
-        "llm": 52,
-        "model": 192,
-        "errors": 0
-      },
-      "bilibili": {
-        "total": 32,
-        "llm": 1,
-        "model": 0,
-        "errors": 0
-      },
-      "xhs": {
-        "total": 3,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      }
-    },
-    "warnings": [],
-    "alerts": [],
-    "_timestamp": "2026-06-29T00:37:40.182248",
-    "_time_str": "06-29 00:37"
-  },
-  {
-    "status": "completed",
-    "batch_id": "batch_e4034c7bbbb5",
-    "date": "2026-06-29",
-    "total_labeled": 358,
-    "llm_count": 6,
-    "model_count": 5,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 3045,
-    "completion_tokens": 511,
-    "estimated_cost": 0.000763,
-    "elapsed_s": 130.3,
-    "platforms": {
-      "zhihu": {
-        "total": 302,
-        "llm": 3,
-        "model": 0,
-        "errors": 0
-      },
-      "weibo": {
-        "total": 22,
-        "llm": 1,
-        "model": 5,
-        "errors": 0
-      },
-      "bilibili": {
-        "total": 31,
-        "llm": 2,
-        "model": 0,
-        "errors": 0
-      },
-      "xhs": {
-        "total": 3,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      }
-    },
-    "warnings": [],
-    "alerts": [],
-    "_timestamp": "2026-06-29T00:50:09.924092",
-    "_time_str": "06-29 00:50"
-  },
-  {
-    "status": "completed",
     "batch_id": "batch_631e56a86acf",
     "date": "2026-06-29",
     "total_labeled": 347,
@@ -533,5 +445,98 @@
     "alerts": [],
     "_timestamp": "2026-06-29T22:40:33.953429",
     "_time_str": "06-29 22:40"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_31fb49019221",
+    "date": "2026-06-30",
+    "total_labeled": 2076,
+    "llm_count": 639,
+    "model_count": 1435,
+    "errors": 2,
+    "error_rate": 0.001,
+    "prompt_tokens": 236210,
+    "completion_tokens": 41666,
+    "estimated_cost": 0.060431,
+    "elapsed_s": 91.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 2076,
+        "llm": 639,
+        "model": 1435,
+        "errors": 2
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-06-30T04:01:33.804611",
+    "_time_str": "06-30 04:01"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_adef7e3eea74",
+    "date": "2026-06-30",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 49.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）",
+      "[weibo] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-06-30T14:35:07.581424",
+    "_time_str": "06-30 14:35"
   }
 ]

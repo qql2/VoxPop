@@ -203,6 +203,27 @@ def api_comment_detail():
         loop.close()
 
 
+@app.route('/api/feedback', methods=['POST'])
+def api_feedback():
+    task_id = uuid.uuid4().hex[:12]
+    cmd = ['/usr/bin/python3', os.path.join(PROJECT_ROOT, 'feedback_keywords.py'), '--apply']
+    env = os.environ.copy()
+    env['PYTHONUNBUFFERED'] = '1'
+    threading.Thread(target=_run_process, args=(task_id, cmd, PROJECT_ROOT), kwargs={'env': env}, daemon=True).start()
+    return jsonify({"task_id": task_id, "message": "反馈闭环已启动"})
+
+
+@app.route('/api/crawl-all', methods=['POST'])
+def api_crawl_all():
+    task_id = uuid.uuid4().hex[:12]
+    minsider_dir = os.path.expanduser("~/MindSpider")
+    cmd = ['/usr/bin/python3', os.path.join(PROJECT_ROOT, 'run_crawl.py'), '--all']
+    env = os.environ.copy()
+    env['PYTHONUNBUFFERED'] = '1'
+    threading.Thread(target=_run_process, args=(task_id, cmd, minsider_dir), kwargs={'env': env}, daemon=True).start()
+    return jsonify({"task_id": task_id, "message": "强制爬取已启动"})
+
+
 def _extract_brief(raw_response: str) -> str:
     """从 LLM 返回的 JSON 中提取 brief 字段"""
     if not raw_response:
@@ -251,6 +272,43 @@ def api_stream(task_id):
             yield f"data: {json.dumps({'event': 'error', 'message': str(e)})}\n\n"
 
     return Response(generate(), mimetype='text/event-stream')
+
+
+@app.route('/api/workflow/status')
+def workflow_status():
+    """返回各流程步骤的上次运行时间"""
+    import time as _time
+    result = {}
+
+    async def gather():
+        conn = await asyncpg.connect(**DB_CONFIG)
+        try:
+            row = await conn.fetchrow("SELECT MAX(created_at) as t FROM crawl_schedule")
+            result["feedback_last_run"] = row["t"] if row and row["t"] else None
+            row = await conn.fetchrow("SELECT MAX(last_crawled_at) as t FROM crawl_schedule WHERE last_crawled_at IS NOT NULL")
+            result["crawl_last_run"] = row["t"] if row and row["t"] else None
+            row = await conn.fetchrow("SELECT MAX(finished_at) as t FROM attitude_batch_log")
+            result["label_last_run"] = row["t"] if row and row["t"] else None
+            result["schedule_count"] = await conn.fetchval("SELECT COUNT(*) FROM crawl_schedule")
+            result["total_labeled"] = await conn.fetchval("SELECT COUNT(*) FROM attitude_labels")
+        finally:
+            await conn.close()
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_until_complete(gather())
+    finally:
+        loop.close()
+
+    for k in ["feedback_last_run", "crawl_last_run", "label_last_run"]:
+        ts = result.get(k)
+        if ts:
+            result[k] = _time.strftime("%m-%d %H:%M", _time.localtime(ts))
+        else:
+            result[k] = "从未运行"
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':
