@@ -1,49 +1,5 @@
 [
   {
-    "status": "completed",
-    "batch_id": "batch_631e56a86acf",
-    "date": "2026-06-29",
-    "total_labeled": 347,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 158.0,
-    "platforms": {
-      "zhihu": {
-        "total": 299,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      },
-      "weibo": {
-        "total": 16,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      },
-      "bilibili": {
-        "total": 29,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      },
-      "xhs": {
-        "total": 3,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      }
-    },
-    "warnings": [],
-    "alerts": [],
-    "_timestamp": "2026-06-29T00:58:11.027063",
-    "_time_str": "06-29 00:58"
-  },
-  {
     "status": "failed",
     "batch_id": "batch_c361c949ed12",
     "date": "2026-06-29",
@@ -538,5 +494,49 @@
     "alerts": [],
     "_timestamp": "2026-06-30T14:35:07.581424",
     "_time_str": "06-30 14:35"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_9bcf98abaad0",
+    "date": "2026-07-01",
+    "total_labeled": 1100,
+    "llm_count": 279,
+    "model_count": 818,
+    "errors": 3,
+    "error_rate": 0.0027,
+    "prompt_tokens": 103806,
+    "completion_tokens": 17802,
+    "estimated_cost": 0.026252,
+    "elapsed_s": 52.9,
+    "platforms": {
+      "zhihu": {
+        "total": 16,
+        "llm": 7,
+        "model": 8,
+        "errors": 1
+      },
+      "weibo": {
+        "total": 1084,
+        "llm": 272,
+        "model": 810,
+        "errors": 2
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [],
+    "alerts": [],
+    "_timestamp": "2026-07-01T04:00:55.781119",
+    "_time_str": "07-01 04:00"
   }
 ]

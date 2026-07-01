@@ -1,102 +1,47 @@
 # Progress Log — VoxPop 全岗位态度盘点
 
-## Phase 1-8 完成
-- 累计 41,050 条态度标注
-- 三合一控制台 + crontab 自动标注
-- 当日关键词去重 + posted_at 时间字段
-- Alpine.js 引入 + 岗位详情下钻
+## Phase 1-10 完成
+- 累计 44,566 条态度标注
+- crawl_schedule 关键词分级调度
+- response_format json_object 解码层约束
+- 三合一控制台（Alpine.js + SSE 实时日志）
+- crontab 自动标注 + 护拦 + macOS 通知
 
-## Phase 9: Bug 修复与性能优化（2026-06-29）
+## Phase 11: 前端重构与工作流可视化（2026-06-30）
 
-### 错误 1：错误计数坏掉（关键 Bug）
-- **现象**：UI 显示 LLM=0、错误=0，用户以为没调 API
-- **根因**：`batch_label_async` 统计 error 的逻辑是 `label_method='llm' AND confidence=0`，但 error 标记的项 `label_method='error'`，永远匹配不上
-- **修复**：改为 `label.get("label_method") == "error"`
-- **影响**：之前所有运行的错误数都被低估了
+### HTML 模板抽离
+- 删掉 `HTML = r"""..."""` 巨量内联字符串（占 ~470 行）
+- 移到 `templates/index.html`，IDE 语法高亮/格式化可用
+- `sql_query_app.py` 从 728 行 → 258 行（-65%）
+- 修复内联字符串中 `\'` 转义导致 JS 解析失败的问题
 
-### 错误 2：LLM 返回非 dict 时崩溃
-- **现象**：`'int' object has no attribute 'get'`，标注进程直接停
-- **根因**：`json.loads` 返回 int 而非 dict，`parsed.get()` 崩溃
-- **修复**：`isinstance(parsed, dict)` 检查，非 dict 走 retry
+### 工作流可视化 Tab
+- 新增 🔄 工作流 Tab
+- 展示完整流程图：反馈闭环 → 爬虫调度 → 自动标注 → 查询展示
+- 每步有触发按钮 + 上次运行时间
+- 新增后端 API：`/api/feedback`、`/api/crawl-all`、`/api/crawl-history`、`/api/workflow/status`
 
-### 错误 3：error 标签不存现场信息
-- **现象**：error 标记的 `raw_response=NULL`，无法排查 API 返回了什么
-- **根因**：`_error_label()` 没保留 API 响应
-- **修复**：`_error_label(raw_response=...)` 现在会保存：
-  - HTTP 错误 → 响应体前 500 字符
-  - 解析失败 → LLM 实际返回文本
-  - 超时/网络异常 → "exception: TimeoutException: ..."
-  - 空响应 → "empty_response"
+### Web 爬取按钮修复
+- 之前 Web 🕷️ 按钮直接调 MindSpider，跳过 `run_crawl.py`
+- 改为调 `run_crawl.py --platforms`，走完整调度流程
+- 修复后到期关键词会先写入 daily_topics 再爬
 
-### 性能：`asyncio.gather` 阻塞全部任务
-- **现象**：0 LLM 调用也耗 100s+
-- **根因**：gather 等所有任务完成，关键词过滤项的 1ms 救不了 API 项的 15s
-- **修复**：预分类——关键词过滤先直出，API 单独 gather
-- **效果**：0 LLM 批次 ~100s → ~10ms，混合批次 3.3x 提效
+### 下钻弹窗时间透传
+- 详情弹窗标题显示「近7天」「近30天」
+- 时间筛选条件透传到 `/api/comment-detail` API
+- 仅显示筛选范围内的评论
 
-### 重试策略调整
-- 恢复解析失败重试（LLM 下次可能输出正确格式）
-- 429/503 重试（可恢复）
-- 其他 4xx 不重试（改什么都没用）
-
-### Web 展示修正
-- "LLM" → "LLM 成功"（消除"以为没调 API"的误导）
-- "错误" → "API 失败"（明确表示 API 调用失败数）
-
-### 模型诊断结论：DeepInfra Meta-Llama-3.1-8B 能力不足
-- **表现**：HTTP 200，但返回内容完全跑题——写代码、说自己是 AI、要求用户先提供评论
-- **根因**：8B 参数模型 hold 不住长中文 system prompt + JSON 格式要求
-- **测试数据**：50 并发，HTTP 200 率 100%，但解析成功率 ~10%
-- **建议**：换更大模型（如 70B）或换 API 提供商
-
-## Phase 10: 关键词分级调度（2026-06-29）
-
-### 问题
-`daily_topics` 按 `extract_date` 匹配，跨天没写 `--apply` 就没关键词爬。热门和冷门关键词没区分。
-
-### 方案
-- 新建 `crawl_schedule` 表：`(keyword, platform, interval_days, last_crawled_at)`
-- 每关键词独立爬取间隔，默认 1 天
-- `run_crawl.py` 重构：读调度 → 写 daily_topics → 爬 → 标记 → 更新时间
-- `feedback_keywords.py --apply` 写入 `crawl_schedule`，不再写 `daily_topics`
-- `--all` 参数强制爬取（忽略调度间隔）
-- 已迁移 30 关键词 × 4 平台 = 120 条
-
-### 文件改动
-| 文件 | 改动 |
-|------|------|
-| schema.sql | 新增 crawl_schedule 表 |
-| db.py | 新增 get_due_keywords / upsert_schedule / mark_schedule_crawled |
-| run_crawl.py | 重构：调度 → daily_topics → 爬取 → 更新时间 |
-| feedback_keywords.py | --apply 改为写 crawl_schedule |
-
-### 关键文件职责（更新）
+## 关键文件职责
 | 文件 | 作用 |
 |------|------|
+| sql_query_app.py | 后端 API + 路由（258 行） |
+| templates/index.html | 前端 HTML + CSS + JS（独立文件） |
+| labeler_fast.py | 异步并行标注器（TokenBucket + json_object） |
+| run_label_cron.py | 定时标注（护拦+通知） |
 | run_crawl.py | 爬虫调度入口（按间隔过滤到期关键词） |
-
-### 调试规范（memory）
-- 新增持久化 memory：`debug-error-labels.md`
-- 规则：调试错误时永远先查 `attitude_labels.raw_response`，不直接调 API
-- raw_response 为空时才需要进一步排查
-
-### Git Log
-```
-f1722f5 perf: 分离关键词过滤与 API 调用
-44b042d fix: 运行状态面板更清晰的字段名
-d5ddd61 fix: 解析失败恢复重试 + Web 字段名修正
-（后续 commit pending: error 标签保留 raw_response）
-```
-
-## 文件职责
-| 文件 | 作用 |
-|------|------|
-| sql_query_app.py | 三合一控制台（Alpine.js + 原生 JS）|
-| labeler_fast.py | 异步并行标注器（含错误处理 + raw_response 保留）|
-| run_label_cron.py | 定时标注（护拦+通知）|
-| run_crawl.py | 手动爬取 CLI + 关键词标记 |
 | observer.py | 状态记录 + macOS 通知 |
-| db.py | 数据库读写 + 排行聚合 |
+| db.py | 数据库读写 + 排行聚合 + 调度 |
+| feedback_keywords.py | 低样本职业→爬虫关键词 |
 | reporter.py | 排行报告生成 |
 | professions.py | 22 种职业关键词词典 |
-| feedback_keywords.py | 低样本职业→爬虫关键词 |
+| CLAUDE.md | 项目文档 |

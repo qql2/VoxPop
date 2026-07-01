@@ -1,28 +1,28 @@
 {
   "status": "completed",
-  "batch_id": "batch_adef7e3eea74",
-  "date": "2026-06-30",
-  "total_labeled": 0,
-  "llm_count": 0,
-  "model_count": 0,
-  "errors": 0,
-  "error_rate": 0,
-  "prompt_tokens": 0,
-  "completion_tokens": 0,
-  "estimated_cost": 0.0,
-  "elapsed_s": 49.9,
+  "batch_id": "batch_9bcf98abaad0",
+  "date": "2026-07-01",
+  "total_labeled": 1100,
+  "llm_count": 279,
+  "model_count": 818,
+  "errors": 3,
+  "error_rate": 0.0027,
+  "prompt_tokens": 103806,
+  "completion_tokens": 17802,
+  "estimated_cost": 0.026252,
+  "elapsed_s": 52.9,
   "platforms": {
     "zhihu": {
-      "total": 0,
-      "llm": 0,
-      "model": 0,
-      "errors": 0
+      "total": 16,
+      "llm": 7,
+      "model": 8,
+      "errors": 1
     },
     "weibo": {
-      "total": 0,
-      "llm": 0,
-      "model": 0,
-      "errors": 0
+      "total": 1084,
+      "llm": 272,
+      "model": 810,
+      "errors": 2
     },
     "bilibili": {
       "total": 0,
@@ -37,11 +37,8 @@
       "errors": 0
     }
   },
-  "warnings": [
-    "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）",
-    "[weibo] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）"
-  ],
+  "warnings": [],
   "alerts": [],
-  "_timestamp": "2026-06-30T14:35:07.581424",
-  "_time_str": "06-30 14:35"
+  "_timestamp": "2026-07-01T04:00:55.781119",
+  "_time_str": "07-01 04:00"
 }

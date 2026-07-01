@@ -60,10 +60,11 @@ _JSON_PROMPT = (
     "3. 隐含职业指代也要识别(如「穿制服的」→警察、「白大褂」→医生)\n"
     "4. 一条评论可能涉及多个职业，需独立标注\n"
     "5. 重要：职业名称必须标准化，同一岗位的不同叫法统一为最常见的规范名称。\n"
-    "例如：码农/程序猿/IT民工→程序员，老师/教师/教书匠→教师，外卖员/骑手/送餐员→外卖员，保姆/阿姨/育儿嫂→保姆，老板/领导/经理/上司→管理岗，公务/事业编/体制内→公务员\n\n"
-    '输出格式：{"has_profession": true/false, "professions": [{"name": "职业名", "sentiment": "positive|negative|neutral", "emotion": "str", "confidence": 0.0-1.0}], "topic": "议题或null", "brief": "一句话总结或null"}'
+    "例如：码农/程序猿/IT民工→程序员，老师/教师/教书匠→教师，外卖员/骑手/送餐员→外卖员，保姆/阿姨/育儿嫂→保姆，老板/领导/经理/上司→管理岗，公务/事业编/体制内→公务员，UI设计师/UI→设计师，班主任/辅导员→教师，外科医生/主治大夫→医生，建模师/模型师/雕刻师→3D建模师，角色动画/骨骼绑定/蒙皮→动画师，游戏策划/游戏程序/游戏美术→游戏开发者，AI智能体/大模型应用开发/Prompt工程→AI Agent开发者\n\n"
+    "例如：码农/程序猿/IT民工→程序员，老师/教师/教书匠→教师，外卖员/骑手/送餐员→外卖员，保姆/阿姨/育儿嫂→保姆，老板/领导/经理/上司→管理岗，公务/事业编/体制内→公务员，UI设计师/UI→设计师，班主任/辅导员→教师，外科医生/主治大夫→医生，建模师/模型师/雕刻师→3D建模师，角色动画/骨骼绑定/蒙皮→动画师，游戏策划/游戏程序/游戏美术→游戏开发者，AI智能体/大模型应用开发/Prompt工程/LangChain→AI Agent开发者\n\n"
+    "注意：AI Agent开发者也是工作岗位，应标注为AI Agent开发者而非程序员。\n"
+    "输出格式：{\"has_profession\": true/false, \"professions\": [{\"name\": \"职业名\", \"sentiment\": \"positive|negative|neutral\", \"emotion\": \"str\", \"confidence\": 0.0-1.0}], \"topic\": \"议题或null\", \"brief\": \"一句话总结或null\"}"
 )
-
 _EMPTY_LABEL = {
     "has_profession": False,
     "professions": json.dumps([], ensure_ascii=False),
