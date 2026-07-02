@@ -111,6 +111,8 @@ async def run():
             print(f"  {PLATFORM_NAMES.get(p, p):5s}: {cnt} 条评论")
 
         # ====== Step 3: 写入 daily_topics（MindSpider 从这里读） ======
+        topic_id = f"{TOPIC_ID_PREFIX}{today.isoformat()}"
+        topic_name = f"VoxPop 调度 — {today.isoformat()}"
         for p in platforms:
             kws = by_platform.get(p, [])
             if not kws:
@@ -141,25 +143,31 @@ async def run():
         else:
             print(f"  ✅ 无残留 Chrome 进程")
 
-        # 清理 Chrome 锁文件（SingletonLock / SingletonCookie 等）
+        # 清理 Chrome 残留文件（锁文件 + Session 恢复文件）
+        CHROME_RESIDUALS = [
+            "SingletonLock", "SingletonCookie", "SingletonSocket",
+            "LOCK", "lockfile",
+            "Last Session", "Last Tabs", "Next Tabs",
+            "Current Session", "Current Tabs",
+        ]
         browser_data_root = os.path.join(MINDSIDER_DIR, "DeepSentimentCrawling", "MediaCrawler", "browser_data")
         for p in platforms:
             for dir_name in [f"{p}_user_data_dir", f"cdp_{p}_user_data_dir"]:
                 lock_dir = os.path.join(browser_data_root, dir_name)
                 if not os.path.isdir(lock_dir):
                     continue
-                lock_files = []
+                residuals = []
                 for root, dirs, files in os.walk(lock_dir):
                     for fname in files:
-                        if fname.startswith("Singleton") or fname == "LOCK":
-                            lock_files.append(os.path.join(root, fname))
-                if lock_files:
-                    for lf in lock_files:
+                        if fname in CHROME_RESIDUALS:
+                            residuals.append(os.path.join(root, fname))
+                if residuals:
+                    for rf in residuals:
                         try:
-                            os.remove(lf)
+                            os.remove(rf)
                         except OSError:
                             pass
-                    print(f"  🧹 {PLATFORM_NAMES.get(p, p)}: 清理 {len(lock_files)} 个锁文件")
+                    print(f"  🧹 {PLATFORM_NAMES.get(p, p)}: 清理 {len(residuals)} 个残留文件")
 
         # ====== Step 5: 调用 MindSpider 爬取（捕获输出判断真实结果） ======
         print(f"\n🚀 启动 MindSpider 爬取...")
