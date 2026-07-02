@@ -8,13 +8,14 @@ VoxPop 爬虫入口 — 自适应间隔调度
   python3 run_crawl.py --all                   # 无视调度，爬 crawl_schedule 全部
 
 调度逻辑:
-  - 爬前/爬后对比 MindSpider 评论表行数，检测是否爬到了新数据
-  - 爬到新数据 → interval_days 减 1（最短 1 天，即每天爬）
-  - 没爬到数据 / 爬取失败 → interval_days 加 1（最长 14 天）
-  - 此机制自动应对平台故障（如 Chrome 崩溃）：失败→间隔拉长→减少重试频率
+  1. 爬前/爬后对比 MindSpider 评论表行数，检测是否爬到了新数据
+  2. 爬到新数据 → interval_days 减 1（最短 1 天）
+  3. 没爬到数据 / 平台报错 → interval_days 加 1（最长 14 天）
+  4. 自动区分"Chrome 崩溃(error)"和"正常但无新数据(no_data)"
 
 可观测性:
   - 每次运行写入 run_crawl_history.json
+  - per-platform status: success | error（Chrome 崩了）| no_data（正常但无新数据）
 """
 import sys, os, subprocess, asyncio, json
 from datetime import date, datetime
@@ -176,13 +177,20 @@ async def run():
         crawl_record["elapsed_s"] = elapsed
 
         # ====== Step 6: 爬后计数 + 自适应调度 ======
-        # 真实失败的检测信号：
-        # 1) returncode != 0
-        # 2) stdout 中有大量 ERROR/失败 但 returncode 却 0（MindSpider 的坑）
-        # 3) 爬后行数没变（最可靠的硬证据）
-        stdout_lower = (result.stdout or "").lower()
-        stderr_lower = (result.stderr or "").lower()
-        has_error_output = "error" in stdout_lower or "失败" in result.stdout or "error" in stderr_lower
+        # 解析 MindSpider 输出，区分"崩溃报错"和"正常运行但无新数据"
+        stdout_text = result.stdout or ""
+        stderr_text = result.stderr or ""
+        stdout_lower = stdout_text.lower()
+        stderr_lower = stderr_text.lower()
+
+        # 错误检测信号
+        has_error_output = "❌ 失败" in stdout_text or "error" in stdout_lower
+        has_chrome_crash = "sigabrt" in stderr_lower or "signal=sigabrt" in stdout_lower
+        error_detail = None
+        if has_chrome_crash:
+            error_detail = "Chrome 浏览器启动失败 (SIGABRT)"
+        elif has_error_output:
+            error_detail = "MindSpider 运行输出含错误"
 
         print(f"\n📊 爬后平台数据量:")
         after_counts = {}
@@ -202,11 +210,17 @@ async def run():
             had_new_data = new_data_per_platform.get(p, 0) > 0
 
             if not had_new_data:
-                # 没爬到新数据 → 拉长间隔
                 await db.adjust_schedule_interval(kws, p, had_new_data=False)
-                print(f"  🔴 {PLATFORM_NAMES.get(p, p)}: 无新数据 → 拉长间隔")
+                # 区分"报错"和"无数据"
+                if error_detail:
+                    status = "error"
+                    icon = "❌"
+                else:
+                    status = "no_data"
+                    icon = "🔴"
+                print(f"  {icon} {PLATFORM_NAMES.get(p, p)}: {status} → 拉长间隔")
                 crawl_record.setdefault("platforms", {})[p] = {
-                    "status": "no_data",
+                    "status": status,
                     "new_rows": 0,
                     "adjustment": "lengthened",
                 }
@@ -225,7 +239,6 @@ async def run():
             # 读取调整后的 interval_days 做展示
             row = None
             if kws:
-                # 取第一个 keyword 作代表展示
                 sample_kw = kws[0]
                 async with db.pool.acquire() as conn:
                     row_r = await conn.fetchrow(
@@ -241,17 +254,25 @@ async def run():
         total_new = sum(new_data_per_platform.values())
         success_platforms = sum(1 for p in platforms if new_data_per_platform.get(p, 0) > 0)
 
-        if total_new > 0:
+        if error_detail:
+            crawl_record["status"] = "error"
+            crawl_record["error_detail"] = error_detail
+            print(f"\n❌ 爬取失败 — {error_detail}")
+            print(f"   ⚠️ 调度间隔已自动拉长，修复 Chrome 后下次运行会重试")
+            if stdout_text:
+                last_lines = "\n".join(stdout_text.strip().splitlines()[-3:])
+                print(f"   📋 MindSpider 最后输出:\n{last_lines}")
+        elif total_new > 0:
             crawl_record["status"] = "completed"
             print(f"\n✅ 爬取完成！{success_platforms}/{len(platforms)} 个平台有新数据（共 {total_new} 条）")
             print(f"   耗时 {elapsed}s")
             print(f"   运行 python3 run_label_cron.py 开始标注")
         else:
-            crawl_record["status"] = "failed"
-            print(f"\n⚠️ 所有平台均未获取到新数据（{'返回码 ' + str(result.returncode) if not has_error_output else '运行输出含错误'}）")
+            crawl_record["status"] = "no_data"
+            print(f"\n⚠️ 所有平台无新数据（MindSpider 正常运行但没爬到新评论）")
             print(f"   ⚠️ 调度间隔已自动拉长，下次运行间隔更久")
-            if result.stdout:
-                last_lines = "\n".join(result.stdout.strip().splitlines()[-5:])
+            if stdout_text:
+                last_lines = "\n".join(stdout_text.strip().splitlines()[-3:])
                 print(f"   📋 MindSpider 最后输出:\n{last_lines}")
 
         _append_crawl_history(crawl_record)
