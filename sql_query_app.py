@@ -256,16 +256,29 @@ def api_stream(task_id):
         for line in buf:
             yield f"data: {json.dumps({'line': line.rstrip()})}\n\n"
 
-        # 实时流
+        # 实时流 — 轮询 task_buffers 取新行（避免与 _run_process 竞争 stdout）
         proc = running_tasks.get(task_id)
         if not proc:
             yield f"data: {json.dumps({'event': 'error', 'message': '任务不存在或已完成'})}\n\n"
             return
 
+        buf = task_buffers.get(task_id, [])
+        old_len = len(buf)
         try:
-            for line in iter(proc.stdout.readline, ''):
+            while proc.poll() is None:
+                buf = task_buffers.get(task_id, [])
+                while len(buf) > old_len:
+                    line = buf[old_len]
+                    old_len += 1
+                    yield f"data: {json.dumps({'line': line.rstrip()})}\n\n"
+                import time
+                time.sleep(0.2)
+            # 进程已退出，清剩余行
+            buf = task_buffers.get(task_id, [])
+            while len(buf) > old_len:
+                line = buf[old_len]
+                old_len += 1
                 yield f"data: {json.dumps({'line': line.rstrip()})}\n\n"
-            proc.wait()
             yield f"data: {json.dumps({'event': 'done', 'code': proc.returncode})}\n\n"
         except Exception as e:
             yield f"data: {json.dumps({'event': 'error', 'message': str(e)})}\n\n"
