@@ -179,9 +179,35 @@ async def run():
         ] + platforms
         print(f"   执行: {' '.join(cmd)}\n")
 
-        result = subprocess.run(cmd, cwd=MINDSIDER_DIR, capture_output=True, text=True)
+        # 用 Popen 实时输出 + 同时捕获全部内容用于分析
+        stdout_lines = []
+        stderr_lines = []
+        env = os.environ.copy()
+        env["PYTHONUNBUFFERED"] = "1"
+        with subprocess.Popen(
+            cmd, cwd=MINDSIDER_DIR, env=env,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, bufsize=1,
+        ) as proc:
+            # 实时打印 stdout（Web SSE 依赖实时输出）
+            for line in proc.stdout:
+                print(line, end="", flush=True)
+                stdout_lines.append(line)
+            # 收集 stderr（SIGABRT 检测用）
+            stderr_text = proc.stderr.read()
+            if stderr_text:
+                for line in stderr_text.splitlines(keepends=True):
+                    stderr_lines.append(line)
+            proc.wait()
+            returncode = proc.returncode
+
+        result_stdout = "".join(stdout_lines)
+        result_stderr = "".join(stderr_lines)
+        result = type("SubprocessResult", (), {
+            "returncode": returncode, "stdout": result_stdout, "stderr": result_stderr,
+        })()
         elapsed = int(datetime.now().timestamp()) - now_ts
-        crawl_record["returncode"] = result.returncode
+        crawl_record["returncode"] = returncode
         crawl_record["elapsed_s"] = elapsed
 
         # ====== Step 6: 爬后计数 + 自适应调度 ======
