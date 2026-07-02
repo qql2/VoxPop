@@ -356,6 +356,42 @@ class AttitudeDB:
                 rows = await conn.fetch(sql)
         return [dict(r) for r in rows]
 
+    _PLATFORM_TABLE = {
+        "wb": "weibo_note_comment",
+        "bili": "bilibili_video_comment",
+        "xhs": "xhs_note_comment",
+        "zhihu": "zhihu_comment",
+    }
+
+    async def count_platform_rows(self, platform_code: str) -> int:
+        """统计 MindSpider 某平台的评论表行数（爬前爬后对比用）"""
+        table = self._PLATFORM_TABLE.get(platform_code)
+        if not table:
+            return 0
+        try:
+            async with self.pool.acquire() as conn:
+                row = await conn.fetchval(f"SELECT COUNT(*) FROM {table}")
+                return row or 0
+        except Exception:
+            return 0
+
+    async def adjust_schedule_interval(self, keywords: list, platform: str, had_new_data: bool):
+        """
+        自适应间隔调度：
+          had_new_data=True  → interval_days = max(1, interval_days - 1)  缩短
+          had_new_data=False → interval_days = min(14, interval_days + 1) 拉长
+        """
+        if not keywords:
+            return
+        delta = -1 if had_new_data else 1
+        sql = """
+            UPDATE crawl_schedule
+            SET interval_days = GREATEST(1, LEAST(14, interval_days + $1))
+            WHERE keyword = ANY($2::text[]) AND platform = $3
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(sql, delta, list(keywords), platform)
+
     async def upsert_schedule(self, keywords: list, platform: str, interval_days: int = 1):
         """批量添加/更新关键词调度"""
         from datetime import datetime

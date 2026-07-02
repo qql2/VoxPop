@@ -57,7 +57,8 @@ qql2/MindSpider (爬虫)  →  PostgreSQL                   →  VoxPop (标注)
 | `sql_query_app.py` | **三合一 Web 控制台** — SQL 查询 + 运行状态 + 一键爬取/标注（Alpine.js + SSE 实时日志） |
 | `labeler_fast.py` | **主标注器** — async parallel, TokenBucket 30/s, 3-retry with backoff, pre-filters API items from keyword-only items |
 | `run_label_cron.py` | **定时标注入口** — 带护拦（错误率 >50% 停止 + 保留 raw_response）、写入 run_status.json、macOS 通知 |
-| `run_crawl.py` | 爬虫调度入口 — 读 crawl_schedule 表，只爬到期关键词，自动更新调度时间 |
+| `run_crawl.py` | 爬虫调度入口 — 读 crawl_schedule 表，爬前爬后 COUNT(*) 对比实现自适应间隔调度 |
+| `run_crawl_history.json` | 爬取可观测性日志（每平台新数据量+间隔调整记录） |
 | `observer.py` | 运行状态记录 + macOS Alert/Banner 通知 |
 | `db.py` | AttitudeDB — asyncpg pool, fetch/insert/rankings/crawled_keywords |
 | `reporter.py` | 排行报告生成 → outputs/<date>/ranking.json + ranking.md |
@@ -71,7 +72,7 @@ qql2/MindSpider (爬虫)  →  PostgreSQL                   →  VoxPop (标注)
 - **Error recovery**: `label_method='error'` items are re-fetched (`WHERE al.id IS NULL OR al.label_method = 'error'`) and retried
 - **posted_at**: Stores original comment publish timestamp (zhihu→publish_time, others→create_time). Supports time-filtered queries (近7天/近30天)
 - **crawled_keywords**: Prevents same-day re-crawling of the same keyword
-- **crawl_schedule**: Per-keyword crawl frequency. `interval_days` controls how often each keyword is crawled (default 1). `run_crawl.py` only crawls due entries (`last_crawled_at + interval_days <= now`)
+- **crawl_schedule**: Adaptive per-keyword crawl frequency. `interval_days` adjusts dynamically: new data → `-1` (min 1), no data → `+1` (max 14). `run_crawl.py` crawls due entries (`last_crawled_at + interval_days <= now`), compares `COUNT(*)` before/after to detect new data. Pre-flight cleanup kills stale Chrome processes and removes Singleton* lock files.
 
 ### TokenBucket
 
