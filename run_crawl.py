@@ -186,23 +186,17 @@ async def run():
         env["PYTHONUNBUFFERED"] = "1"
         with subprocess.Popen(
             cmd, cwd=MINDSIDER_DIR, env=env,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
             text=True, bufsize=1,
         ) as proc:
-            # 实时打印 stdout（Web SSE 依赖实时输出）
             for line in proc.stdout:
                 print(line, end="", flush=True)
                 stdout_lines.append(line)
-            # 收集 stderr（SIGABRT 检测用）
-            stderr_text = proc.stderr.read()
-            if stderr_text:
-                for line in stderr_text.splitlines(keepends=True):
-                    stderr_lines.append(line)
             proc.wait()
             returncode = proc.returncode
 
         result_stdout = "".join(stdout_lines)
-        result_stderr = "".join(stderr_lines)
+        result_stderr = ""  # 已合并到 stdout
         result = type("SubprocessResult", (), {
             "returncode": returncode, "stdout": result_stdout, "stderr": result_stderr,
         })()
@@ -212,14 +206,10 @@ async def run():
 
         # ====== Step 6: 爬后计数 + 自适应调度 ======
         # 解析 MindSpider 输出，区分"崩溃报错"和"正常运行但无新数据"
-        stdout_text = result.stdout or ""
-        stderr_text = result.stderr or ""
-        stdout_lower = stdout_text.lower()
-        stderr_lower = stderr_text.lower()
-
-        # 错误检测信号
-        has_error_output = "❌ 失败" in stdout_text or "error" in stdout_lower
-        has_chrome_crash = "sigabrt" in stderr_lower or "signal=sigabrt" in stdout_lower
+        # 错误检测信号（stderr 已合并到 stdout）
+        stdout_lower = result_stdout.lower()
+        has_error_output = "❌ 失败" in result_stdout or "error" in stdout_lower
+        has_chrome_crash = "sigabrt" in stdout_lower
         error_detail = None
         if has_chrome_crash:
             error_detail = "Chrome 浏览器启动失败 (SIGABRT)"
@@ -293,8 +283,8 @@ async def run():
             crawl_record["error_detail"] = error_detail
             print(f"\n❌ 爬取失败 — {error_detail}")
             print(f"   ⚠️ 调度间隔已自动拉长，修复 Chrome 后下次运行会重试")
-            if stdout_text:
-                last_lines = "\n".join(stdout_text.strip().splitlines()[-3:])
+            if result_stdout:
+                last_lines = "\n".join(result_stdout.strip().splitlines()[-3:])
                 print(f"   📋 MindSpider 最后输出:\n{last_lines}")
         elif total_new > 0:
             crawl_record["status"] = "completed"
@@ -305,7 +295,7 @@ async def run():
             crawl_record["status"] = "no_data"
             print(f"\n⚠️ 所有平台无新数据（MindSpider 正常运行但没爬到新评论）")
             print(f"   ⚠️ 调度间隔已自动拉长，下次运行间隔更久")
-            if stdout_text:
+            if result_stdout:
                 last_lines = "\n".join(stdout_text.strip().splitlines()[-3:])
                 print(f"   📋 MindSpider 最后输出:\n{last_lines}")
 
