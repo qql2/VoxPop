@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     SPARK_BASE_URL: str = "https://spark-api-open.xf-yun.com/v1"
     SPARK_MODEL: str = "lite"
 
+    # --- Langfuse（LLM 可观测性） ---
+    LANGFUSE_ENABLED: bool = False
+    LANGFUSE_HOST: str = "https://cloud.langfuse.com"
+    LANGFUSE_PUBLIC_KEY: str = ""
+    LANGFUSE_SECRET_KEY: str = ""
+
     # --- 标注 ---
     BATCH_SIZE: int = 20
 

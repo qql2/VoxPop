@@ -5,9 +5,23 @@ labeler_fast.py — 异步并行版标注器
 import json, asyncio, time
 from asyncio import Lock
 import httpx as async_httpx
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from config import settings
 from professions import PROFESSION_KEYWORDS
+
+# ---- Langfuse 可观测性（可选，通过 LANGFUSE_ENABLED 控制） ----
+_langfuse: Optional["Langfuse"] = None
+if settings.LANGFUSE_ENABLED:
+    try:
+        from langfuse import Langfuse
+        _langfuse = Langfuse(
+            host=settings.LANGFUSE_HOST,
+            public_key=settings.LANGFUSE_PUBLIC_KEY,
+            secret_key=settings.LANGFUSE_SECRET_KEY,
+        )
+    except Exception as e:
+        print(f"  ⚠️ Langfuse 初始化失败（将跳过追踪）: {e}")
+        _langfuse = None
 
 
 class TokenBucket:
@@ -91,6 +105,24 @@ def _error_label(raw_response: str = None) -> dict:
                if k not in ('label_method', 'confidence_score', 'raw_response')}}
 
 
+def _end_trace(lf_trace, result_dict: dict, error: str = None):
+    """结束 Langfuse trace"""
+    if not lf_trace:
+        return
+    try:
+        lf_trace.update(
+            output=result_dict.get("raw_response") or result_dict.get("label_method", ""),
+            level="ERROR" if error or result_dict.get("label_method") == "error" else "DEFAULT",
+            status_message=error or result_dict.get("label_method", "ok"),
+            metadata={
+                "label_method": result_dict.get("label_method"),
+                "sentiment": result_dict.get("sentiment_polarity"),
+            },
+        )
+    except Exception:
+        pass  # Langfuse 异常不干扰主流程
+
+
 def _keyword_match(content: str) -> bool:
     text_lower = content.lower()
     for prof, keywords in PROFESSION_KEYWORDS.items():
@@ -121,8 +153,19 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
     }
 
     retry_delays = [0.5, 2, 5]
+
+    # ---- Langfuse trace（可选） ----
+    lf_trace = None
+    if _langfuse:
+        lf_trace = _langfuse.trace(
+            name="llm_label",
+            input=content[:200],
+            metadata={"model": settings.LLM_MODEL},
+        )
+
     for attempt in range(3):
         try:
+            t0 = time.monotonic()
             resp = await client.post(
                 f"{settings.LLM_BASE_URL}/chat/completions",
                 headers={"Authorization": f"Bearer {settings.LLM_API_KEY}"},
@@ -137,14 +180,20 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 if attempt < 2:
                     await asyncio.sleep(5)
                     continue
-                return _error_label(resp.text[:500])
+                result = _error_label(resp.text[:500])
+                _end_trace(lf_trace, result, "rate_limited")
+                return result
             elif resp.status_code == 503 or resp.status_code >= 500:
                 if attempt < 2:
                     await asyncio.sleep(retry_delays[attempt])
                     continue
-                return _error_label(resp.text[:500])
+                result = _error_label(resp.text[:500])
+                _end_trace(lf_trace, result, f"HTTP_{resp.status_code}")
+                return result
             elif resp.status_code != 200:
-                return _error_label(resp.text[:500])
+                result = _error_label(resp.text[:500])
+                _end_trace(lf_trace, result, f"HTTP_{resp.status_code}")
+                return result
 
             data = resp.json()
             usage = data.get("usage", {})
@@ -158,7 +207,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                     delay = retry_delays[attempt]
                     await asyncio.sleep(delay)
                     continue
-                return _error_label("empty_response")
+                result = _error_label("empty_response")
+                _end_trace(lf_trace, result, "empty_response")
+                return result
 
             parsed = json.loads(content)
             if not isinstance(parsed, dict):
@@ -166,7 +217,9 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                     delay = retry_delays[attempt]
                     await asyncio.sleep(delay)
                     continue
-                return _error_label(content[:500])
+                result = _error_label(content[:500])
+                _end_trace(lf_trace, result, "parse_failed")
+                return result
 
             has_prof = parsed.get("has_profession", False)
             professions = parsed.get("professions", [])
@@ -184,7 +237,7 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 emotion = "indifference"
                 avg_conf = 0.5
 
-            return {
+            result = {
                 "has_profession": has_prof,
                 "professions": json.dumps(professions, ensure_ascii=False),
                 "sentiment_polarity": sentiment,
@@ -201,14 +254,20 @@ async def _call_api_async(client: async_httpx.AsyncClient, content: str, bucket:
                 "raw_response": content[:1000],
                 "raw_request": json.dumps(request_body, ensure_ascii=False)[:500],
             }
+            _end_trace(result)
+            return result
         except (json.JSONDecodeError, async_httpx.TimeoutException, async_httpx.RequestError) as e:
             if attempt < 2:
                 delay = retry_delays[attempt] if not isinstance(e, async_httpx.TimeoutException) else 3
                 await asyncio.sleep(delay)
                 continue
-            return _error_label(f"exception: {type(e).__name__}: {str(e)[:200]}")
+            result = _error_label(f"exception: {type(e).__name__}: {str(e)[:200]}")
+            _end_trace(lf_trace, result, f"exception:{type(e).__name__}")
+            return result
 
-    return _error_label("max_retries_exhausted")
+    result = _error_label("max_retries_exhausted")
+    _end_trace(lf_trace, result, "max_retries")
+    return result
 
 
 async def batch_label_async(items: List[Dict[str, Any]], batch_id: str) -> List[Dict[str, Any]]:
