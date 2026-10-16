@@ -30,3 +30,1093 @@
    Token: 输入 103806 / 输出 17802
    成本: $0.026252
    耗时: 53s
+  ⚠️ error 示例: [2024.02]
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+  [weibo] 第1批: 500条 (LLM:101 本地:399 错误:0) 累计500
+  [weibo] 第2批: 500条 (LLM:109 本地:391 错误:0) 累计1000
+  [weibo] 第3批: 422条 (LLM:91 本地:330 错误:1) 累计1422
+
+聚合排行...
+排行: outputs/2026-07-02/ranking.json
+
+==================================================
+✅ 标注: 1422条 (LLM 301 / 本地 1120 / 错误 1)
+   Token: 输入 202810 / 输出 18613
+   成本: $0.041589
+   耗时: 65s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 1/1422 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  [zhihu] 第1批: 500条 (LLM:131 本地:368 错误:1) 累计500
+  [zhihu] 第2批: 362条 (LLM:121 本地:241 错误:0) 累计862
+  [weibo] 第1批: 500条 (LLM:95 本地:404 错误:1) 累计1362
+  [weibo] 第2批: 500条 (LLM:99 本地:401 错误:0) 累计1862
+  [weibo] 第3批: 111条 (LLM:24 本地:87 错误:0) 累计1973
+
+聚合排行...
+排行: outputs/2026-07-03/ranking.json
+
+==================================================
+✅ 标注: 1973条 (LLM 470 / 本地 1501 / 错误 2)
+   Token: 输入 323723 / 输出 28926
+   成本: $0.065914
+   耗时: 45s
+  [zhihu] 第1批: 500条 (LLM:149 本地:350 错误:1) 累计500
+  [zhihu] 第2批: 480条 (LLM:168 本地:311 错误:1) 累计980
+  [weibo] 第1批: 1条 (LLM:1 本地:0 错误:0) 累计981
+  [bilibili] 第1批: 500条 (LLM:103 本地:395 错误:2) 累计1481
+  [bilibili] 第2批: 500条 (LLM:156 本地:341 错误:3) 累计1981
+  [bilibili] 第3批: 500条 (LLM:171 本地:327 错误:2) 累计2481
+  [bilibili] 第4批: 500条 (LLM:107 本地:393 错误:0) 累计2981
+  [bilibili] 第5批: 98条 (LLM:26 本地:72 错误:0) 累计3079
+  [xhs] 第1批: 79条 (LLM:15 本地:64 错误:0) 累计3158
+
+聚合排行...
+排行: outputs/2026-07-04/ranking.json
+
+==================================================
+✅ 标注: 3158条 (LLM 896 / 本地 2253 / 错误 9)
+   Token: 输入 624337 / 输出 58570
+   成本: $0.128793
+   耗时: 127s
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  [weibo] 第1批: 500条 (LLM:126 本地:370 错误:4) 累计500
+  [weibo] 第2批: 500条 (LLM:93 本地:399 错误:8) 累计1000
+  [weibo] 第3批: 500条 (LLM:80 本地:414 错误:6) 累计1500
+  [weibo] 第4批: 500条 (LLM:91 本地:405 错误:4) 累计2000
+  [weibo] 第5批: 500条 (LLM:71 本地:421 错误:8) 累计2500
+  [weibo] 第6批: 500条 (LLM:100 本地:393 错误:7) 累计3000
+  [weibo] 第7批: 500条 (LLM:102 本地:395 错误:3) 累计3500
+  [weibo] 第8批: 500条 (LLM:112 本地:384 错误:4) 累计4000
+  [weibo] 第9批: 500条 (LLM:120 本地:374 错误:6) 累计4500
+  [weibo] 第10批: 500条 (LLM:129 本地:365 错误:6) 累计5000
+  [weibo] 第11批: 500条 (LLM:72 本地:428 错误:0) 累计5500
+  [weibo] 第12批: 500条 (LLM:85 本地:405 错误:10) 累计6000
+  [weibo] 第13批: 500条 (LLM:78 本地:422 错误:0) 累计6500
+  [weibo] 第14批: 500条 (LLM:88 本地:410 错误:2) 累计7000
+  [weibo] 第15批: 500条 (LLM:133 本地:365 错误:2) 累计7500
+  [weibo] 第16批: 500条 (LLM:62 本地:435 错误:3) 累计8000
+  [weibo] 第17批: 500条 (LLM:75 本地:419 错误:6) 累计8500
+  [weibo] 第18批: 498条 (LLM:75 本地:414 错误:9) 累计8998
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（7 条已落盘）
+
+聚合排行...
+排行: outputs/2026-07-05/ranking.json
+
+==================================================
+✅ 标注: 8998条 (LLM 1692 / 本地 7218 / 错误 88)
+   Token: 输入 1141294 / 输出 93712
+   成本: $0.227421
+   耗时: 1029s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 88/8998 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（7 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  [weibo] 第1批: 88条 (LLM:50 本地:0 错误:38) 累计88
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（7 条已落盘）
+
+聚合排行...
+排行: outputs/2026-07-06/ranking.json
+
+==================================================
+✅ 标注: 88条 (LLM 50 / 本地 0 / 错误 38)
+   Token: 输入 35570 / 输出 4773
+   成本: $0.008199
+   耗时: 160s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 38/88 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（7 条已落盘） | 错误率 43.2%（超过 10%）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  [weibo] 第1批: 38条 (LLM:28 本地:0 错误:10) 累计38
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 86% (>50%)，跳过该平台（6 条已落盘）
+
+聚合排行...
+排行: outputs/2026-07-07/ranking.json
+
+==================================================
+✅ 标注: 38条 (LLM 28 / 本地 0 / 错误 10)
+   Token: 输入 20292 / 输出 3504
+   成本: $0.005146
+   耗时: 159s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 10/38 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [bilibili] 第1批错误率 86% (>50%)，跳过该平台（6 条已落盘） | 错误率 26.3%（超过 10%）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 80% (>50%)，跳过该平台（8 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 158s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 80% (>50%)，跳过该平台（8 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting ',' delimiter: line 1 column 1052 (char 1051)
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  [weibo] 第1批: 500条 (LLM:160 本地:337 错误:3) 累计500
+  [weibo] 第2批: 500条 (LLM:99 本地:401 错误:0) 累计1000
+  [weibo] 第3批: 500条 (LLM:88 本地:412 错误:0) 累计1500
+  [weibo] 第4批: 500条 (LLM:94 本地:406 错误:0) 累计2000
+  [weibo] 第5批: 500条 (LLM:94 本地:406 错误:0) 累计2500
+  [weibo] 第6批: 500条 (LLM:124 本地:375 错误:1) 累计3000
+  [weibo] 第7批: 500条 (LLM:83 本地:417 错误:0) 累计3500
+  [weibo] 第8批: 500条 (LLM:138 本地:362 错误:0) 累计4000
+  [weibo] 第9批: 500条 (LLM:54 本地:446 错误:0) 累计4500
+  [weibo] 第10批: 500条 (LLM:98 本地:402 错误:0) 累计5000
+  [weibo] 第11批: 500条 (LLM:70 本地:430 错误:0) 累计5500
+  [weibo] 第12批: 500条 (LLM:119 本地:381 错误:0) 累计6000
+  [weibo] 第13批: 500条 (LLM:102 本地:398 错误:0) 累计6500
+  [weibo] 第14批: 500条 (LLM:108 本地:392 错误:0) 累计7000
+  [weibo] 第15批: 500条 (LLM:117 本地:383 错误:0) 累计7500
+  [weibo] 第16批: 63条 (LLM:16 本地:47 错误:0) 累计7563
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1129 (char 1128)
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting ',' delimiter: line 1 column 1025 (char 1024)
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1139 (char 1138)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+聚合排行...
+排行: outputs/2026-07-09/ranking.json
+
+==================================================
+✅ 标注: 7563条 (LLM 1564 / 本地 5995 / 错误 4)
+   Token: 输入 1056411 / 输出 92129
+   成本: $0.213739
+   耗时: 331s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 4/7563 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 160s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 157s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 173s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 161s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 159s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（4 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 75% (>50%)，跳过该平台（3 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 159s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘） | [weibo] 第1批错误率 75% (>50%)，跳过该平台（3 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  [zhihu] 第1批: 2条 (LLM:1 本地:0 错误:1) 累计2
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（3 条已落盘）
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+聚合排行...
+排行: outputs/2026-07-16/ranking.json
+
+==================================================
+✅ 标注: 2条 (LLM 1 / 本地 0 / 错误 1)
+   Token: 输入 1040 / 输出 129
+   成本: $0.000233
+   耗时: 157s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 1/2 | [weibo] 第1批错误率 100% (>50%)，跳过该平台（3 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘） | 错误率 50.0%（超过 10%）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: [2024.02]
+🔴 [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1045 (char 1044)
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1085 (char 1084)
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1045 (char 1044)
+🔴 [weibo] 第1批错误率 100% (>50%)，跳过该平台（3 条已落盘）
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1129 (char 1128)
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting ',' delimiter: line 1 column 1024 (char 1023)
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1139 (char 1138)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 83s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘） | [weibo] 第1批错误率 100% (>50%)，跳过该平台（3 条已落盘） | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（6 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  [zhihu] 第1批: 1条 (LLM:1 本地:0 错误:0) 累计1
+  [weibo] 第1批: 3条 (LLM:3 本地:0 错误:0) 累计4
+  [bilibili] 第1批: 6条 (LLM:5 本地:0 错误:1) 累计10
+
+聚合排行...
+排行: outputs/2026-07-18/ranking.json
+
+==================================================
+✅ 标注: 10条 (LLM 9 / 本地 0 / 错误 1)
+   Token: 输入 8037 / 输出 895
+   成本: $0.001743
+   耗时: 77s
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 51s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: {"error":{"message":"Model busy, retry later","type":"invalid_request_error","param":null,"code":"engine_overloaded"}}
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 14s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 49s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 44s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 36s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 42s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 51s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 53s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 49s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 44s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 40s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 1098 (char 1097)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 45s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 52s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 42s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 57s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 52s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 50s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 57s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 48s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1118 (char 1117)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 45s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 42s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 47s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 52s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 41s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 52s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 40s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 49s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 45s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 41s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1097 (char 1096)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 42s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1127 (char 1126)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 50s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 1098 (char 1097)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 44s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 48s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 46s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 48s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1116 (char 1115)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 40s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 54s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 28s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 46s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 43s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 55s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 47s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 36s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Unterminated string starting at: line 1 column 1121 (char 1120)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 35s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: ReadTimeout: 
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 56s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds
+  ⚠️ error 示例: exception: JSONDecodeError: Expecting value: line 1 column 1132 (char 1131)
+🔴 [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）
+
+==================================================
+✅ 标注: 0条 (LLM 0 / 本地 0 / 错误 0)
+   Token: 输入 0 / 输出 0
+   成本: $0.000000
+   耗时: 41s
+[observer] 发送通知失败: Command '['osascript', '-e', '\n        display alert "⚠️ VoxPop 标注异常" message "错误 0/0 | [bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）" buttons {"知道了"} default button "知道了"\n        ']' timed out after 10 seconds

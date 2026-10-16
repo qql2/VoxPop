@@ -1,0 +1,30 @@
+🚀 VoxPop 控制台
+   访问 http://127.0.0.1:5001
+ * Serving Flask app 'sql_query_app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5001
+Press CTRL+C to quit
+127.0.0.1 - - [13/Aug/2026 13:49:19] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:49:19] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:49:23] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:52:21] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:52:23] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:52:25] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [13/Aug/2026 13:52:29] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:52:44] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:52:56] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:53:27] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:53:30] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:53:48] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:54:09] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:54:12] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:54:23] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:54:47] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:54:54] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:55:21] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 13:55:47] "POST /api/comment-detail HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 14:19:13] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 14:19:21] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 14:19:27] "POST /query HTTP/1.1" 200 -
+127.0.0.1 - - [13/Aug/2026 14:19:32] "POST /query HTTP/1.1" 200 -

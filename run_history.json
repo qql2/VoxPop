@@ -1,365 +1,8 @@
 [
   {
-    "status": "failed",
-    "batch_id": "batch_c361c949ed12",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 69.8,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止"
-    ],
-    "_timestamp": "2026-06-29T01:27:11.591871",
-    "_time_str": "06-29 01:27"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_ee2978e81fff",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 54.1,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止"
-    ],
-    "_timestamp": "2026-06-29T04:00:56.101952",
-    "_time_str": "06-29 04:00"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_b84561cd93c4",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 54.4,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止"
-    ],
-    "_timestamp": "2026-06-29T17:59:29.781250",
-    "_time_str": "06-29 17:59"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_f00c1bd68af8",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 43.6,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 99% (>50%)，立即停止（297 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:04:28.281864",
-    "_time_str": "06-29 18:04"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_de5b093811c5",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 44.5,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止（297 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:05:35.874634",
-    "_time_str": "06-29 18:05"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_0edc3e47117c",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 65.6,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止（296 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:27:17.017155",
-    "_time_str": "06-29 18:27"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_f7d6e97a301a",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 56.9,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止（295 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:32:09.412630",
-    "_time_str": "06-29 18:32"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_c7d2433acfea",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 63.1,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 87% (>50%)，立即停止（258 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:36:37.011927",
-    "_time_str": "06-29 18:36"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_3042e4d1d2f6",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 83.9,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 60% (>50%)，立即停止（154 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T18:47:13.942940",
-    "_time_str": "06-29 18:47"
-  },
-  {
-    "status": "error",
-    "batch_id": "batch_9314a35dd6db",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 63.0,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [],
-    "error": "'NoneType' object is not subscriptable",
-    "_timestamp": "2026-06-29T22:04:55.651106",
-    "_time_str": "06-29 22:04"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_5f881c8bdc31",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 40.2,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 82% (>50%)，立即停止（90 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T22:06:03.720250",
-    "_time_str": "06-29 22:06"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_c312ba1dae5c",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 36.3,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 88% (>50%)，立即停止（79 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T22:08:29.005458",
-    "_time_str": "06-29 22:08"
-  },
-  {
-    "status": "error",
-    "batch_id": "batch_b7c18891e041",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 2.1,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [],
-    "error": "name 'raw_saved' is not defined",
-    "_timestamp": "2026-06-29T22:33:59.185049",
-    "_time_str": "06-29 22:33"
-  },
-  {
     "status": "completed",
-    "batch_id": "batch_f5b455331cea",
-    "date": "2026-06-29",
-    "total_labeled": 127,
-    "llm_count": 126,
-    "model_count": 0,
-    "errors": 1,
-    "error_rate": 0.0079,
-    "prompt_tokens": 49324,
-    "completion_tokens": 10072,
-    "estimated_cost": 0.013442,
-    "elapsed_s": 26.0,
-    "platforms": {
-      "zhihu": {
-        "total": 79,
-        "llm": 78,
-        "model": 0,
-        "errors": 1
-      },
-      "weibo": {
-        "total": 16,
-        "llm": 16,
-        "model": 0,
-        "errors": 0
-      },
-      "bilibili": {
-        "total": 29,
-        "llm": 29,
-        "model": 0,
-        "errors": 0
-      },
-      "xhs": {
-        "total": 3,
-        "llm": 3,
-        "model": 0,
-        "errors": 0
-      }
-    },
-    "warnings": [],
-    "alerts": [],
-    "_timestamp": "2026-06-29T22:34:50.743672",
-    "_time_str": "06-29 22:34"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_c3f85b60c857",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 21.6,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止（1 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T22:38:49.982709",
-    "_time_str": "06-29 22:38"
-  },
-  {
-    "status": "failed",
-    "batch_id": "batch_f33f4b38c7d6",
-    "date": "2026-06-29",
-    "total_labeled": 0,
-    "llm_count": 0,
-    "model_count": 0,
-    "errors": 0,
-    "error_rate": 0.0,
-    "prompt_tokens": 0,
-    "completion_tokens": 0,
-    "estimated_cost": 0.0,
-    "elapsed_s": 20.9,
-    "platforms": {},
-    "warnings": [],
-    "alerts": [
-      "[zhihu] 第1批错误率 100% (>50%)，立即停止（1 条已落盘可查）"
-    ],
-    "_timestamp": "2026-06-29T22:39:47.902825",
-    "_time_str": "06-29 22:39"
-  },
-  {
-    "status": "completed",
-    "batch_id": "batch_d747ddf30ff6",
-    "date": "2026-06-29",
+    "batch_id": "batch_c6e74559bddb",
+    "date": "2026-09-25",
     "total_labeled": 0,
     "llm_count": 0,
     "model_count": 0,
@@ -368,7 +11,7 @@
     "prompt_tokens": 0,
     "completion_tokens": 0,
     "estimated_cost": 0.0,
-    "elapsed_s": 5.5,
+    "elapsed_s": 55.2,
     "platforms": {
       "zhihu": {
         "total": 0,
@@ -396,62 +39,16 @@
       }
     },
     "warnings": [
-      "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
     ],
     "alerts": [],
-    "_timestamp": "2026-06-29T22:40:33.953429",
-    "_time_str": "06-29 22:40"
+    "_timestamp": "2026-09-25T04:00:57.012273",
+    "_time_str": "09-25 04:00"
   },
   {
     "status": "completed",
-    "batch_id": "batch_31fb49019221",
-    "date": "2026-06-30",
-    "total_labeled": 2076,
-    "llm_count": 639,
-    "model_count": 1435,
-    "errors": 2,
-    "error_rate": 0.001,
-    "prompt_tokens": 236210,
-    "completion_tokens": 41666,
-    "estimated_cost": 0.060431,
-    "elapsed_s": 91.9,
-    "platforms": {
-      "zhihu": {
-        "total": 0,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      },
-      "weibo": {
-        "total": 2076,
-        "llm": 639,
-        "model": 1435,
-        "errors": 2
-      },
-      "bilibili": {
-        "total": 0,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      },
-      "xhs": {
-        "total": 0,
-        "llm": 0,
-        "model": 0,
-        "errors": 0
-      }
-    },
-    "warnings": [
-      "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
-    ],
-    "alerts": [],
-    "_timestamp": "2026-06-30T04:01:33.804611",
-    "_time_str": "06-30 04:01"
-  },
-  {
-    "status": "completed",
-    "batch_id": "batch_adef7e3eea74",
-    "date": "2026-06-30",
+    "batch_id": "batch_e000c00559be",
+    "date": "2026-09-26",
     "total_labeled": 0,
     "llm_count": 0,
     "model_count": 0,
@@ -460,7 +57,7 @@
     "prompt_tokens": 0,
     "completion_tokens": 0,
     "estimated_cost": 0.0,
-    "elapsed_s": 49.9,
+    "elapsed_s": 55.5,
     "platforms": {
       "zhihu": {
         "total": 0,
@@ -488,38 +85,37 @@
       }
     },
     "warnings": [
-      "[zhihu] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）",
-      "[weibo] 第1批错误率 100% (>50%)，跳过该平台（2 条已落盘）"
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
     ],
     "alerts": [],
-    "_timestamp": "2026-06-30T14:35:07.581424",
-    "_time_str": "06-30 14:35"
+    "_timestamp": "2026-09-26T04:00:57.166031",
+    "_time_str": "09-26 04:00"
   },
   {
     "status": "completed",
-    "batch_id": "batch_9bcf98abaad0",
-    "date": "2026-07-01",
-    "total_labeled": 1100,
-    "llm_count": 279,
-    "model_count": 818,
-    "errors": 3,
-    "error_rate": 0.0027,
-    "prompt_tokens": 103806,
-    "completion_tokens": 17802,
-    "estimated_cost": 0.026252,
-    "elapsed_s": 52.9,
+    "batch_id": "batch_0d14c3c89f42",
+    "date": "2026-09-27",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 48.5,
     "platforms": {
       "zhihu": {
-        "total": 16,
-        "llm": 7,
-        "model": 8,
-        "errors": 1
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
       },
       "weibo": {
-        "total": 1084,
-        "llm": 272,
-        "model": 810,
-        "errors": 2
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
       },
       "bilibili": {
         "total": 0,
@@ -534,9 +130,793 @@
         "errors": 0
       }
     },
-    "warnings": [],
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
     "alerts": [],
-    "_timestamp": "2026-07-01T04:00:55.781119",
-    "_time_str": "07-01 04:00"
+    "_timestamp": "2026-09-27T04:00:50.160380",
+    "_time_str": "09-27 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_c433fc8055d3",
+    "date": "2026-09-28",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 55.5,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-09-28T04:00:57.659383",
+    "_time_str": "09-28 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_08d7fdce0e34",
+    "date": "2026-09-29",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 45.7,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-09-29T04:00:47.243857",
+    "_time_str": "09-29 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_d23ad5fd0e45",
+    "date": "2026-09-30",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 47.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-09-30T04:00:49.415939",
+    "_time_str": "09-30 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_e676a922df89",
+    "date": "2026-10-01",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 55.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-01T04:00:58.559101",
+    "_time_str": "10-01 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_c08e94f07caf",
+    "date": "2026-10-03",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 40.5,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-03T04:00:42.744709",
+    "_time_str": "10-03 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_38b6b48daacd",
+    "date": "2026-10-04",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 53.5,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-04T04:00:55.127736",
+    "_time_str": "10-04 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_b1d5870a82ac",
+    "date": "2026-10-05",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 27.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-05T04:00:30.015660",
+    "_time_str": "10-05 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_f536733f857d",
+    "date": "2026-10-06",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 45.8,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-06T04:00:47.431850",
+    "_time_str": "10-06 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_8b26ecc719b4",
+    "date": "2026-10-07",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 43.1,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-07T04:00:44.316668",
+    "_time_str": "10-07 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_3536328f4f84",
+    "date": "2026-10-08",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 56.0,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-08T04:00:57.644162",
+    "_time_str": "10-08 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_77abf79ebd9d",
+    "date": "2026-10-10",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 56.0,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-10T04:00:57.825582",
+    "_time_str": "10-10 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_984e399394c3",
+    "date": "2026-10-11",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 55.3,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-11T04:00:56.934093",
+    "_time_str": "10-11 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_9f5435104c61",
+    "date": "2026-10-12",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 47.4,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-12T04:00:48.936526",
+    "_time_str": "10-12 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_a08085a71d85",
+    "date": "2026-10-13",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 35.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-13T04:00:37.174770",
+    "_time_str": "10-13 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_edf817afadba",
+    "date": "2026-10-14",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 35.0,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-14T04:00:36.491556",
+    "_time_str": "10-14 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_ddba5952a8a5",
+    "date": "2026-10-15",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 55.8,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-15T04:00:57.034891",
+    "_time_str": "10-15 04:00"
+  },
+  {
+    "status": "completed",
+    "batch_id": "batch_283bd8cb709a",
+    "date": "2026-10-16",
+    "total_labeled": 0,
+    "llm_count": 0,
+    "model_count": 0,
+    "errors": 0,
+    "error_rate": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "estimated_cost": 0.0,
+    "elapsed_s": 40.9,
+    "platforms": {
+      "zhihu": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "weibo": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "bilibili": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      },
+      "xhs": {
+        "total": 0,
+        "llm": 0,
+        "model": 0,
+        "errors": 0
+      }
+    },
+    "warnings": [
+      "[bilibili] 第1批错误率 100% (>50%)，跳过该平台（1 条已落盘）"
+    ],
+    "alerts": [],
+    "_timestamp": "2026-10-16T04:00:42.425755",
+    "_time_str": "10-16 04:00"
   }
 ]

@@ -7,5 +7,208 @@
     "returncode": null,
     "platforms": {},
     "total_due": 0
+  },
+  {
+    "status": "failed",
+    "batch_id": "crawl_20260702_235312",
+    "date": "2026-07-02",
+    "elapsed_s": 261,
+    "returncode": 0,
+    "platforms": {
+      "wb": {
+        "status": "no_data",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      },
+      "bili": {
+        "status": "no_data",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      },
+      "xhs": {
+        "status": "no_data",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      },
+      "zhihu": {
+        "status": "no_data",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      }
+    },
+    "total_due": 660
+  },
+  {
+    "status": "no_data",
+    "batch_id": "crawl_20260703_000854",
+    "date": "2026-07-03",
+    "elapsed_s": 2,
+    "returncode": 0,
+    "platforms": {
+      "zhihu": {
+        "status": "no_data",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 3
+      }
+    },
+    "total_due": 165
+  },
+  {
+    "status": "error",
+    "batch_id": "crawl_20260703_001104",
+    "date": "2026-07-03",
+    "elapsed_s": 257,
+    "returncode": 0,
+    "platforms": {
+      "wb": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 3
+      },
+      "bili": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 3
+      },
+      "xhs": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 3
+      },
+      "zhihu": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 4
+      }
+    },
+    "total_due": 660,
+    "error_detail": "Chrome 浏览器启动失败 (SIGABRT)"
+  },
+  {
+    "status": "completed",
+    "batch_id": "crawl_20260703_004714",
+    "date": "2026-07-03",
+    "elapsed_s": 205,
+    "returncode": 0,
+    "platforms": {
+      "zhihu": {
+        "status": "success",
+        "new_rows": 6,
+        "adjustment": "shortened",
+        "new_interval_days": 3
+      }
+    },
+    "total_due": 165
+  },
+  {
+    "status": "error",
+    "batch_id": "crawl_20260703_005216",
+    "date": "2026-07-03",
+    "elapsed_s": 258,
+    "returncode": 0,
+    "platforms": {
+      "wb": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 4
+      },
+      "bili": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 4
+      },
+      "xhs": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 4
+      }
+    },
+    "total_due": 495,
+    "error_detail": "Chrome 浏览器启动失败 (SIGABRT)"
+  },
+  {
+    "status": "no_due",
+    "batch_id": "crawl_20260703_145825",
+    "date": "2026-07-03",
+    "elapsed_s": 0,
+    "returncode": null,
+    "platforms": {},
+    "total_due": 0
+  },
+  {
+    "status": "error",
+    "batch_id": "crawl_20260704_130219",
+    "date": "2026-07-04",
+    "elapsed_s": 29565,
+    "returncode": 0,
+    "platforms": {
+      "wb": {
+        "status": "success",
+        "new_rows": 9595,
+        "adjustment": "shortened",
+        "new_interval_days": 3
+      },
+      "bili": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 5
+      },
+      "xhs": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 5
+      }
+    },
+    "total_due": 495,
+    "error_detail": "MindSpider 运行输出含错误"
+  },
+  {
+    "status": "error",
+    "batch_id": "crawl_20260708_121629",
+    "date": "2026-07-08",
+    "elapsed_s": 30913,
+    "returncode": 0,
+    "platforms": {
+      "wb": {
+        "status": "success",
+        "new_rows": 8048,
+        "adjustment": "shortened",
+        "new_interval_days": 1
+      },
+      "bili": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      },
+      "xhs": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 6
+      },
+      "zhihu": {
+        "status": "error",
+        "new_rows": 0,
+        "adjustment": "lengthened",
+        "new_interval_days": 2
+      }
+    },
+    "total_due": 668,
+    "error_detail": "MindSpider 运行输出含错误"
   }
 ]

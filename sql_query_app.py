@@ -351,6 +351,7 @@ def crawl_history():
 
 
 if __name__ == '__main__':
+    port = int(os.environ.get('WEB_PORT', '5000'))
     print("🚀 VoxPop 控制台")
-    print(f"   访问 http://127.0.0.1:5000")
-    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)
+    print(f"   访问 http://127.0.0.1:{port}")
+    app.run(host='127.0.0.1', port=port, debug=False, threaded=True)
